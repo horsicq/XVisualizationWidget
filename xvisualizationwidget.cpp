@@ -34,6 +34,33 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) :
     ui->graphicsViewResult->setScene(pScene);
 
     pScene->addText("TEST");
+
+    QImage image = createImage();
+
+//    image.save("C:\\tmp_build\\temp_out.jpeg");
+
+    QPixmap pixmap = QPixmap::fromImage(image);
+
+    QGraphicsPixmapItem *item = new XFileImage(QColor(Qt::green));
+    item->setPixmap(pixmap);
+    item->setPos(QPointF(10, 10));
+    pScene->addItem(item);
+
+//    QGraphicsPixmapItem *item2 = new XFileImage(QColor(Qt::green));
+//    item2->setPixmap(pixmap);
+//    item2->setPos(QPointF(20, 20));
+//    pScene->addItem(item2);
+
+    QGraphicsTextItem *item3 = new XFileDescription(QColor(Qt::yellow), "_TST_TST_");
+    item3->setPos(QPointF(30, 30));
+    pScene->addItem(item3);
+
+    QGraphicsTextItem *item4 = new XFileDescription(QColor(Qt::blue), "ABC");
+    item4->setPos(QPointF(40, 40));
+    pScene->addItem(item4);
+
+    ui->horizontalSliderZoom->setMaximum(500);
+    ui->horizontalSliderZoom->setValue(250);
 }
 
 XVisualizationWidget::~XVisualizationWidget()
@@ -44,6 +71,10 @@ XVisualizationWidget::~XVisualizationWidget()
 
 QImage XVisualizationWidget::createImage()
 {
+//    qint32 nBlockSize = 3;
+//    qint32 nWidth = 100;
+//    qint32 nHeight = 200;
+
     qint32 nBlockSize = 3;
     qint32 nWidth = 100;
     qint32 nHeight = 200;
@@ -58,8 +89,8 @@ QImage XVisualizationWidget::createImage()
         for (qint32 j = 0; j < nHeight; j++) {
             QRect rect(nBlockSize * i, nBlockSize * j, nBlockSize, nBlockSize);
 
-//            painter.fillRect(rect, Qt::green);
-            painter.drawRect(rect);
+            painter.fillRect(rect, Qt::green);
+//            painter.drawRect(rect);
         }
     }
 
@@ -83,4 +114,14 @@ void XVisualizationWidget::setData(QIODevice *pDevice, XBinary::FT fileType, boo
 void XVisualizationWidget::reload()
 {
     // TODO
+}
+
+void XVisualizationWidget::on_horizontalSliderZoom_valueChanged(int nValue)
+{
+    qreal scale = qPow(qreal(2), (nValue - 250) / qreal(50));
+
+    QTransform matrix;
+    matrix.scale(scale, scale);
+
+    ui->graphicsViewResult->setTransform(matrix);
 }

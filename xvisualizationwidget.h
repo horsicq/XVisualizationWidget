@@ -26,6 +26,9 @@
 #include <QPainter>
 #include <QGraphicsScene>
 #include "xformats.h"
+#include "xfileimage.h"
+#include "xfiledescription.h"
+#include "xvisualization.h"
 
 namespace Ui {
 class XVisualizationWidget;
@@ -43,6 +46,9 @@ public:
 
     void setData(QIODevice *pDevice, XBinary::FT fileType, bool bAuto = false);
     void reload();
+
+private slots:
+    void on_horizontalSliderZoom_valueChanged(int nValue);
 
 private:
     Ui::XVisualizationWidget *ui;
