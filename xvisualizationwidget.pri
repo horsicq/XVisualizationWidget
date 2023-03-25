@@ -5,6 +5,7 @@ FORMS += \
     $$PWD/xvisualizationwidget.ui
 
 HEADERS += \
+    $$PWD/dialogvisualizationprocess.h \
     $$PWD/xfilearrow.h \
     $$PWD/xfiledescription.h \
     $$PWD/xfileimage.h \
@@ -12,6 +13,7 @@ HEADERS += \
     $$PWD/xvisualizationwidget.h
 
 SOURCES += \
+    $$PWD/dialogvisualizationprocess.cpp \
     $$PWD/xfilearrow.cpp \
     $$PWD/xfiledescription.cpp \
     $$PWD/xfileimage.cpp \

@@ -22,12 +22,24 @@
 #define XVISUALIZATION_H
 
 #include <QObject>
+#include "xformats.h"
 
 class XVisualization : public QObject
 {
     Q_OBJECT
 public:
+    struct DATA {
+        qint32 nWidth;
+        qint32 nHeight;
+        qint32 nBlockSize;
+        QList<XBinary::OFFSETSIZE> listRegions;
+        QList<XBinary::OFFSETSIZE> listHighlights;
+    };
+
     explicit XVisualization(QObject *pParent = nullptr);
+
+    static QImage createImage(DATA *pData);
+    void process(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT *pPdStruct);
 
 signals:
 

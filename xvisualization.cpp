@@ -25,3 +25,15 @@ XVisualization::XVisualization(QObject *pParent)
 {
 
 }
+
+QImage XVisualization::createImage(DATA *pData)
+{
+    QImage result;
+
+    return result;
+}
+
+void XVisualization::process(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT *pPdStruct)
+{
+    // TODO
+}
