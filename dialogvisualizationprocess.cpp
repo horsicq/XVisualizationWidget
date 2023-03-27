@@ -22,5 +22,33 @@
 
 DialogVisualizationProcess::DialogVisualizationProcess(QWidget *pParent) : XDialogProcess(pParent)
 {
+    g_pThread = nullptr;
+    g_pVisualization = nullptr;
+}
 
+DialogVisualizationProcess::~DialogVisualizationProcess()
+{
+    stop();
+    waitForFinished();
+
+    g_pThread->quit();
+    g_pThread->wait();
+
+    delete g_pThread;
+    delete g_pVisualization;
+}
+
+void DialogVisualizationProcess::setData(QIODevice *pDevice, XVisualization::DATA *pData)
+{
+    g_pVisualization = new XVisualization;
+    g_pThread = new QThread;
+
+    g_pVisualization->moveToThread(g_pThread);
+
+    connect(g_pThread, SIGNAL(started()), g_pVisualization, SLOT(process()));
+    connect(g_pVisualization, SIGNAL(completed(qint64)), this, SLOT(onCompleted(qint64)));
+    connect(g_pVisualization, SIGNAL(errorMessage(QString)), this, SLOT(errorMessage(QString)));
+
+    g_pVisualization->setData(pDevice, pData, getPdStruct());
+    g_pThread->start();
 }

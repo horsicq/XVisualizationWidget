@@ -22,13 +22,20 @@
 #define DIALOGVISUALIZATIONPROCESS_H
 
 #include "xdialogprocess.h"
+#include "xvisualization.h"
 
 class DialogVisualizationProcess : public XDialogProcess
 {
     Q_OBJECT
 
 public:
-    DialogVisualizationProcess(QWidget *pParent);
+    explicit DialogVisualizationProcess(QWidget *pParent);
+    ~DialogVisualizationProcess();
+    void setData(QIODevice *pDevice, XVisualization::DATA *pData);
+
+private:
+    QThread *g_pThread;
+    XVisualization *g_pVisualization;
 };
 
 #endif // DIALOGVISUALIZATIONPROCESS_H

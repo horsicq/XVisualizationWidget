@@ -28,12 +28,50 @@ XVisualization::XVisualization(QObject *pParent)
 
 QImage XVisualization::createImage(DATA *pData)
 {
-    QImage result;
+//    qint32 nBlockSize = 3;
+//    qint32 nWidth = 100;
+//    qint32 nHeight = 200;
 
-    return result;
+    qint32 nBlockSize = 3;
+    qint32 nWidth = 100;
+    qint32 nHeight = 200;
+
+    QImage imageResult(QSize(nBlockSize * nWidth, nBlockSize * nHeight), QImage::Format_RGB32);
+    QPainter painter(&imageResult);
+    painter.setBrush(QBrush(Qt::green));
+    painter.setPen(QColor(Qt::black));
+    //painter.setBackground(QBrush(Qt::red));
+
+    for (qint32 i = 0; i < nWidth; i++) {
+        for (qint32 j = 0; j < nHeight; j++) {
+            QRect rect(nBlockSize * i, nBlockSize * j, nBlockSize, nBlockSize);
+
+            painter.fillRect(rect, Qt::gray);
+//            painter.drawRect(rect);
+        }
+    }
+
+//    painter.fillRect(QRectF(0,0,20,20),Qt::green);
+//    painter.fillRect(QRectF(100,100,200,100),Qt::white);
+
+    return imageResult;
 }
 
-void XVisualization::process(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT *pPdStruct)
+void XVisualization::setData(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT *pPdStruct)
 {
-    // TODO
+    g_pDevice = pDevice;
+    g_pData = pData;
+    g_pPdStruct = pPdStruct;
+}
+
+void XVisualization::process()
+{
+    QElapsedTimer scanTimer;
+    scanTimer.start();
+
+    qint32 _nFreeIndex = XBinary::getFreeIndex(g_pPdStruct);
+
+    XBinary::setPdStructFinished(g_pPdStruct, _nFreeIndex);
+
+    emit completed(scanTimer.elapsed());
 }

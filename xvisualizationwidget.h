@@ -22,13 +22,11 @@
 #define XVISUALIZATIONWIDGET_H
 
 #include <QWidget>
-#include <QImage>
-#include <QPainter>
 #include <QGraphicsScene>
 #include "xformats.h"
 #include "xfileimage.h"
 #include "xfiledescription.h"
-#include "xvisualization.h"
+#include "dialogvisualizationprocess.h"
 
 namespace Ui {
 class XVisualizationWidget;
@@ -42,18 +40,19 @@ public:
     explicit XVisualizationWidget(QWidget *pParent = nullptr);
     ~XVisualizationWidget();
 
-    static QImage createImage();
-
     void setData(QIODevice *pDevice, XBinary::FT fileType, bool bAuto = false);
     void reload();
+    void reloadImage();
 
 private slots:
     void on_horizontalSliderZoom_valueChanged(int nValue);
+    void setupMatrix(qint32 nValue);
 
 private:
     Ui::XVisualizationWidget *ui;
     QIODevice *g_pDevice;
     QGraphicsScene *pScene;
+    XVisualization::DATA g_data;
 };
 
 #endif // XVISUALIZATIONWIDGET_H

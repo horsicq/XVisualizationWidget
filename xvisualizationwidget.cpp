@@ -31,33 +31,7 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) :
     pScene = new QGraphicsScene(this);
 
     ui->graphicsViewResult->setDragMode(QGraphicsView::RubberBandDrag);
-    ui->graphicsViewResult->setScene(pScene);
-
-    pScene->addText("TEST");
-
-    QImage image = createImage();
-
-//    image.save("C:\\tmp_build\\temp_out.jpeg");
-
-    QPixmap pixmap = QPixmap::fromImage(image);
-
-    QGraphicsPixmapItem *item = new XFileImage(QColor(Qt::green));
-    item->setPixmap(pixmap);
-    item->setPos(QPointF(10, 10));
-    pScene->addItem(item);
-
-//    QGraphicsPixmapItem *item2 = new XFileImage(QColor(Qt::green));
-//    item2->setPixmap(pixmap);
-//    item2->setPos(QPointF(20, 20));
-//    pScene->addItem(item2);
-
-    QGraphicsTextItem *item3 = new XFileDescription(QColor(Qt::yellow), "_TST_TST_");
-    item3->setPos(QPointF(30, 30));
-    pScene->addItem(item3);
-
-    QGraphicsTextItem *item4 = new XFileDescription(QColor(Qt::blue), "ABC");
-    item4->setPos(QPointF(40, 40));
-    pScene->addItem(item4);
+    ui->graphicsViewResult->setScene(pScene); 
 
     ui->horizontalSliderZoom->setMaximum(500);
     ui->horizontalSliderZoom->setValue(250);
@@ -67,37 +41,6 @@ XVisualizationWidget::~XVisualizationWidget()
 {
     delete pScene;
     delete ui;
-}
-
-QImage XVisualizationWidget::createImage()
-{
-//    qint32 nBlockSize = 3;
-//    qint32 nWidth = 100;
-//    qint32 nHeight = 200;
-
-    qint32 nBlockSize = 3;
-    qint32 nWidth = 100;
-    qint32 nHeight = 200;
-
-    QImage imageResult(QSize(nBlockSize * nWidth, nBlockSize * nHeight), QImage::Format_RGB32);
-    QPainter painter(&imageResult);
-    painter.setBrush(QBrush(Qt::green));
-    painter.setPen(QColor(Qt::black));
-    //painter.setBackground(QBrush(Qt::red));
-
-    for (qint32 i = 0; i < nWidth; i++) {
-        for (qint32 j = 0; j < nHeight; j++) {
-            QRect rect(nBlockSize * i, nBlockSize * j, nBlockSize, nBlockSize);
-
-            painter.fillRect(rect, Qt::green);
-//            painter.drawRect(rect);
-        }
-    }
-
-//    painter.fillRect(QRectF(0,0,20,20),Qt::green);
-//    painter.fillRect(QRectF(100,100,200,100),Qt::white);
-
-    return imageResult;
 }
 
 void XVisualizationWidget::setData(QIODevice *pDevice, XBinary::FT fileType, bool bAuto)
@@ -114,9 +57,61 @@ void XVisualizationWidget::setData(QIODevice *pDevice, XBinary::FT fileType, boo
 void XVisualizationWidget::reload()
 {
     // TODO
+    // Resolution
+    // Method
+
+    if (g_pDevice) {
+        DialogVisualizationProcess dvp(XOptions::getMainWidget(this));
+
+        dvp.setData(g_pDevice, &g_data);
+
+        dvp.showDialogDelay();
+
+        if (dvp.isSuccess()) {
+            reloadImage();
+        }
+    }
+}
+
+void XVisualizationWidget::reloadImage()
+{
+    // TODO first add Image then descriptions
+    pScene->clear();
+
+    QGraphicsTextItem *itemRegions = new XFileDescription(QColor(Qt::yellow), "_TST_TST_");
+    itemRegions->setPos(QPointF(0, 0));
+    pScene->addItem(itemRegions);
+
+    QGraphicsTextItem *item4 = new XFileDescription(QColor(Qt::blue), "ABC");
+    item4->setPos(QPointF(150, 0));
+    pScene->addItem(item4);
+
+    QImage image = XVisualization::createImage(&g_data);
+
+//    image.save("C:\\tmp_build\\temp_out.jpeg");
+
+    QPixmap pixmap = QPixmap::fromImage(image);
+
+    QGraphicsPixmapItem *itemMain = new XFileImage(QColor(Qt::green));
+    itemMain->setPixmap(pixmap);
+    itemMain->setPos(QPointF(itemRegions->boundingRect().width(), 0));
+    pScene->addItem(itemMain);
+
+//    QGraphicsPixmapItem *item2 = new XFileImage(QColor(Qt::green));
+//    item2->setPixmap(pixmap);
+//    item2->setPos(QPointF(20, 20));
+//    pScene->addItem(item2);
+
+    setupMatrix(100); // TODO fix
+    setupMatrix(250);
 }
 
 void XVisualizationWidget::on_horizontalSliderZoom_valueChanged(int nValue)
+{
+    setupMatrix(nValue);
+}
+
+void XVisualizationWidget::setupMatrix(qint32 nValue)
 {
     qreal scale = qPow(qreal(2), (nValue - 250) / qreal(50));
 

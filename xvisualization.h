@@ -21,28 +21,44 @@
 #ifndef XVISUALIZATION_H
 #define XVISUALIZATION_H
 
-#include <QObject>
+#include <QPainter>
 #include "xformats.h"
 
 class XVisualization : public QObject
 {
     Q_OBJECT
 public:
+    struct XAREA {
+        qint64 nOffset;
+        qint64 nSize;
+        QString sText;
+        QColor color;
+    };
+
     struct DATA {
         qint32 nWidth;
         qint32 nHeight;
         qint32 nBlockSize;
-        QList<XBinary::OFFSETSIZE> listRegions;
-        QList<XBinary::OFFSETSIZE> listHighlights;
+        QList<XAREA> listRegions;
+        QList<XAREA> listHighlights;
     };
 
     explicit XVisualization(QObject *pParent = nullptr);
 
     static QImage createImage(DATA *pData);
-    void process(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT *pPdStruct);
+    void setData(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT *pPdStruct);
 
 signals:
+    void errorMessage(QString sText);
+    void completed(qint64 nElapsed);
 
+public slots:
+    void process();
+
+private:
+    QIODevice *g_pDevice;
+    DATA *g_pData;
+    XBinary::PDSTRUCT *g_pPdStruct;
 };
 
 #endif // XVISUALIZATION_H
