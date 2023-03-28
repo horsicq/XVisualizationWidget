@@ -71,6 +71,8 @@ void XVisualization::process()
 
     qint32 _nFreeIndex = XBinary::getFreeIndex(g_pPdStruct);
 
+    // TODO
+
     XBinary::setPdStructFinished(g_pPdStruct, _nFreeIndex);
 
     emit completed(scanTimer.elapsed());
