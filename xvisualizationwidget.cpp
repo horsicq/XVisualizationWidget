@@ -86,6 +86,10 @@ void XVisualizationWidget::reloadImage()
     item4->setPos(QPointF(150, 0));
     pScene->addItem(item4);
 
+    g_data.nBlockSize = 3; // TODO
+    g_data.nWidth = 100; // TODO
+    g_data.nHeight = 200; // TODO
+
     QImage image = XVisualization::createImage(&g_data);
 
 //    image.save("C:\\tmp_build\\temp_out.jpeg");

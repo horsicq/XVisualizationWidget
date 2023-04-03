@@ -28,23 +28,15 @@ XVisualization::XVisualization(QObject *pParent)
 
 QImage XVisualization::createImage(DATA *pData)
 {
-//    qint32 nBlockSize = 3;
-//    qint32 nWidth = 100;
-//    qint32 nHeight = 200;
-
-    qint32 nBlockSize = 3;
-    qint32 nWidth = 100;
-    qint32 nHeight = 200;
-
-    QImage imageResult(QSize(nBlockSize * nWidth, nBlockSize * nHeight), QImage::Format_RGB32);
+    QImage imageResult(QSize(pData->nBlockSize * pData->nWidth, pData->nBlockSize * pData->nHeight), QImage::Format_RGB32);
     QPainter painter(&imageResult);
     painter.setBrush(QBrush(Qt::green));
     painter.setPen(QColor(Qt::black));
     //painter.setBackground(QBrush(Qt::red));
 
-    for (qint32 i = 0; i < nWidth; i++) {
-        for (qint32 j = 0; j < nHeight; j++) {
-            QRect rect(nBlockSize * i, nBlockSize * j, nBlockSize, nBlockSize);
+    for (qint32 i = 0; i < pData->nWidth; i++) {
+        for (qint32 j = 0; j < pData->nHeight; j++) {
+            QRect rect(pData->nBlockSize * i, pData->nBlockSize * j, pData->nBlockSize, pData->nBlockSize);
 
             painter.fillRect(rect, Qt::gray);
 //            painter.drawRect(rect);
