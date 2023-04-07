@@ -28,8 +28,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include "xvisualization.h"
 
-class XFileDescription : public QGraphicsTextItem
-{
+class XFileDescription : public QGraphicsTextItem {
 public:
     XFileDescription(const QColor color, QString sText);
 
@@ -47,4 +46,4 @@ private:
     QString g_sText;
 };
 
-#endif // XFILEDESCRIPTION_H
+#endif  // XFILEDESCRIPTION_H

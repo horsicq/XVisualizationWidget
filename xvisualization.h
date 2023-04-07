@@ -24,8 +24,7 @@
 #include <QPainter>
 #include "xformats.h"
 
-class XVisualization : public QObject
-{
+class XVisualization : public QObject {
     Q_OBJECT
 public:
     enum DATAMETHOD {
@@ -69,4 +68,4 @@ private:
     XBinary::PDSTRUCT *g_pPdStruct;
 };
 
-#endif // XVISUALIZATION_H
+#endif  // XVISUALIZATION_H

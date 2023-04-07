@@ -24,8 +24,7 @@
 #include "xdialogprocess.h"
 #include "xvisualization.h"
 
-class DialogVisualizationProcess : public XDialogProcess
-{
+class DialogVisualizationProcess : public XDialogProcess {
     Q_OBJECT
 
 public:
@@ -38,4 +37,4 @@ private:
     XVisualization *g_pVisualization;
 };
 
-#endif // DIALOGVISUALIZATIONPROCESS_H
+#endif  // DIALOGVISUALIZATIONPROCESS_H

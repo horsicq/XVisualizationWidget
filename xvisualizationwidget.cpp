@@ -21,9 +21,7 @@
 #include "xvisualizationwidget.h"
 #include "ui_xvisualizationwidget.h"
 
-XVisualizationWidget::XVisualizationWidget(QWidget *pParent) :
-    QWidget(pParent),
-    ui(new Ui::XVisualizationWidget)
+XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : QWidget(pParent), ui(new Ui::XVisualizationWidget)
 {
     ui->setupUi(this);
 
@@ -31,7 +29,7 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) :
     pScene = new QGraphicsScene(this);
 
     ui->graphicsViewResult->setDragMode(QGraphicsView::RubberBandDrag);
-    ui->graphicsViewResult->setScene(pScene); 
+    ui->graphicsViewResult->setScene(pScene);
 
     ui->horizontalSliderZoom->setMaximum(500);
     ui->horizontalSliderZoom->setValue(250);
@@ -66,9 +64,9 @@ void XVisualizationWidget::reload()
     // Get XBinary:: regions, highlights, resolution
     // TODO insert to QListWidgets
 
-    g_data.nBlockSize = 3; // TODO
-    g_data.nWidth = 100; // TODO
-    g_data.nHeight = 200; // TODO
+    g_data.nBlockSize = 3;  // TODO
+    g_data.nWidth = 100;    // TODO
+    g_data.nHeight = 200;   // TODO
     g_data.dataMethod = XVisualization::DATAMETHOD_ENTROPY;
     g_data.colorBase = this->palette().background().color();
 
@@ -109,7 +107,7 @@ void XVisualizationWidget::reloadImage()
     pScene->addItem(pItemRegions);
     pScene->addItem(pItemHighlights);
 
-    setupMatrix(100); // TODO fix
+    setupMatrix(100);  // TODO fix
     setupMatrix(250);
 }
 

@@ -28,14 +28,13 @@
 #include <QGraphicsSceneMouseEvent>
 #include "xvisualization.h"
 
-class XFileImage : public QGraphicsPixmapItem
-{
+class XFileImage : public QGraphicsPixmapItem {
 public:
     XFileImage(const QColor &color);
 
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
-//    void paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget) override;
+    //    void paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget) override;
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -46,4 +45,4 @@ private:
     QColor color;
 };
 
-#endif // XFILEIMAGE_H
+#endif  // XFILEIMAGE_H

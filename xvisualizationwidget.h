@@ -32,8 +32,7 @@ namespace Ui {
 class XVisualizationWidget;
 }
 
-class XVisualizationWidget : public QWidget
-{
+class XVisualizationWidget : public QWidget {
     Q_OBJECT
 
 public:
@@ -58,4 +57,4 @@ private:
     XVisualization::DATA g_data;
 };
 
-#endif // XVISUALIZATIONWIDGET_H
+#endif  // XVISUALIZATIONWIDGET_H

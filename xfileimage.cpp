@@ -39,9 +39,9 @@ QPainterPath XFileImage::shape() const
     return path;
 }
 
-//void XFileImage::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget)
+// void XFileImage::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget)
 //{
-//    Q_UNUSED(pWidget);
+//     Q_UNUSED(pWidget);
 
 //    const qreal rZoom = pOption->levelOfDetailFromTransform(pPainter->worldTransform());
 

@@ -20,10 +20,8 @@
  */
 #include "xvisualization.h"
 
-XVisualization::XVisualization(QObject *pParent)
-    : QObject(pParent)
+XVisualization::XVisualization(QObject *pParent) : QObject(pParent)
 {
-
 }
 
 QImage XVisualization::createImage(DATA *pData)
@@ -32,7 +30,7 @@ QImage XVisualization::createImage(DATA *pData)
     QPainter painter(&imageResult);
     painter.setBrush(QBrush(Qt::green));
     painter.setPen(QColor(Qt::black));
-    //painter.setBackground(QBrush(Qt::red));
+    // painter.setBackground(QBrush(Qt::red));
 
     qint32 nIndex = 0;
 
@@ -45,14 +43,14 @@ QImage XVisualization::createImage(DATA *pData)
             QColor colorBlock = pData->colorBase.darker(nValue);
 
             painter.fillRect(rect, colorBlock);
-//            painter.drawRect(rect);
+            //            painter.drawRect(rect);
 
             nIndex++;
         }
     }
 
-//    painter.fillRect(QRectF(0,0,20,20),Qt::green);
-//    painter.fillRect(QRectF(100,100,200,100),Qt::white);
+    //    painter.fillRect(QRectF(0,0,20,20),Qt::green);
+    //    painter.fillRect(QRectF(100,100,200,100),Qt::white);
 
     return imageResult;
 }
@@ -87,7 +85,6 @@ void XVisualization::process()
         }
     } else if (g_pData->dataMethod == DATAMETHOD_ENTROPY) {
         for (qint32 i = 0; (i < nNumberOfBlocks) && (!(g_pPdStruct->bIsStop)); i++) {
-
             double dValue = 0;
             dValue = binary.getEntropy(i * nFileBlockSize, nFileBlockSize, g_pPdStruct);
             qint32 nValue = 100 + (200 * dValue) / 8;

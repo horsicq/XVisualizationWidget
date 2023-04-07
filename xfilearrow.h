@@ -24,10 +24,9 @@
 #include <QGraphicsLineItem>
 #include "xvisualization.h"
 
-class XFileArrow : public QGraphicsLineItem
-{
+class XFileArrow : public QGraphicsLineItem {
 public:
     XFileArrow();
 };
 
-#endif // XFILEARROW_H
+#endif  // XFILEARROW_H
