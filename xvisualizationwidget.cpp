@@ -35,6 +35,9 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) :
 
     ui->horizontalSliderZoom->setMaximum(500);
     ui->horizontalSliderZoom->setValue(250);
+
+    ui->splitterVisualization->setStretchFactor(0, 1);
+    ui->splitterVisualization->setStretchFactor(1, 0);
 }
 
 XVisualizationWidget::~XVisualizationWidget()
@@ -59,6 +62,15 @@ void XVisualizationWidget::reload()
     // TODO
     // Resolution
     // Method
+    // TODO
+    // Get XBinary:: regions, highlights, resolution
+    // TODO insert to QListWidgets
+
+    g_data.nBlockSize = 3; // TODO
+    g_data.nWidth = 100; // TODO
+    g_data.nHeight = 200; // TODO
+    g_data.dataMethod = XVisualization::DATAMETHOD_ENTROPY;
+    g_data.colorBase = this->palette().background().color();
 
     if (g_pDevice) {
         DialogVisualizationProcess dvp(XOptions::getMainWidget(this));
@@ -75,36 +87,27 @@ void XVisualizationWidget::reload()
 
 void XVisualizationWidget::reloadImage()
 {
+    quint32 nDelta = 10;
     // TODO first add Image then descriptions
     pScene->clear();
 
-    QGraphicsTextItem *itemRegions = new XFileDescription(QColor(Qt::yellow), "_TST_TST_");
-    itemRegions->setPos(QPointF(0, 0));
-    pScene->addItem(itemRegions);
-
-    QGraphicsTextItem *item4 = new XFileDescription(QColor(Qt::blue), "ABC");
-    item4->setPos(QPointF(150, 0));
-    pScene->addItem(item4);
-
-    g_data.nBlockSize = 3; // TODO
-    g_data.nWidth = 100; // TODO
-    g_data.nHeight = 200; // TODO
+    QGraphicsTextItem *pItemRegions = new XFileDescription(QColor(Qt::yellow), "_TST_TST_");
+    pItemRegions->setPos(QPointF(0, 0));
 
     QImage image = XVisualization::createImage(&g_data);
 
-//    image.save("C:\\tmp_build\\temp_out.jpeg");
-
     QPixmap pixmap = QPixmap::fromImage(image);
 
-    QGraphicsPixmapItem *itemMain = new XFileImage(QColor(Qt::green));
-    itemMain->setPixmap(pixmap);
-    itemMain->setPos(QPointF(itemRegions->boundingRect().width(), 0));
-    pScene->addItem(itemMain);
+    QGraphicsPixmapItem *pItemMain = new XFileImage(QColor(Qt::green));
+    pItemMain->setPixmap(pixmap);
+    pItemMain->setPos(QPointF(pItemRegions->boundingRect().width() + nDelta, 0));
 
-//    QGraphicsPixmapItem *item2 = new XFileImage(QColor(Qt::green));
-//    item2->setPixmap(pixmap);
-//    item2->setPos(QPointF(20, 20));
-//    pScene->addItem(item2);
+    QGraphicsTextItem *pItemHighlights = new XFileDescription(QColor(Qt::blue), "ABC");
+    pItemHighlights->setPos(QPointF(pItemRegions->boundingRect().width() + pItemMain->boundingRect().width() + 2 * nDelta, 0));
+
+    pScene->addItem(pItemMain);
+    pScene->addItem(pItemRegions);
+    pScene->addItem(pItemHighlights);
 
     setupMatrix(100); // TODO fix
     setupMatrix(250);
@@ -123,4 +126,28 @@ void XVisualizationWidget::setupMatrix(qint32 nValue)
     matrix.scale(scale, scale);
 
     ui->graphicsViewResult->setTransform(matrix);
+}
+
+void XVisualizationWidget::on_pushButtonVisualizationSave_clicked()
+{
+    QString sFilter = XOptions::getImageFilter();
+
+    QString sFileName = XBinary::getResultFileName(g_pDevice, QString("%1.png").arg(tr("Visualization")));
+
+    sFileName = QFileDialog::getSaveFileName(this, tr("Save"), sFileName, sFilter);
+
+    if (!sFileName.isEmpty()) {
+        QPixmap pixMap = ui->graphicsViewResult->viewport()->grab();
+        pixMap.save(sFileName);
+    }
+}
+
+void XVisualizationWidget::on_listWidgetRegions_itemSelectionChanged()
+{
+    reloadImage();
+}
+
+void XVisualizationWidget::on_listWidgetHighlights_itemSelectionChanged()
+{
+    reloadImage();
 }

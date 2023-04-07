@@ -34,12 +34,20 @@ QImage XVisualization::createImage(DATA *pData)
     painter.setPen(QColor(Qt::black));
     //painter.setBackground(QBrush(Qt::red));
 
-    for (qint32 i = 0; i < pData->nWidth; i++) {
-        for (qint32 j = 0; j < pData->nHeight; j++) {
-            QRect rect(pData->nBlockSize * i, pData->nBlockSize * j, pData->nBlockSize, pData->nBlockSize);
+    qint32 nIndex = 0;
 
-            painter.fillRect(rect, Qt::gray);
+    for (qint32 i = 0; i < pData->nHeight; i++) {
+        for (qint32 j = 0; j < pData->nWidth; j++) {
+            QRect rect(pData->nBlockSize * j, pData->nBlockSize * i, pData->nBlockSize, pData->nBlockSize);
+
+            qint32 nValue = pData->listParts.at(nIndex);
+
+            QColor colorBlock = pData->colorBase.darker(nValue);
+
+            painter.fillRect(rect, colorBlock);
 //            painter.drawRect(rect);
+
+            nIndex++;
         }
     }
 
@@ -61,7 +69,31 @@ void XVisualization::process()
     QElapsedTimer scanTimer;
     scanTimer.start();
 
+    g_pData->listParts.clear();
+
     qint32 _nFreeIndex = XBinary::getFreeIndex(g_pPdStruct);
+
+    XBinary binary(g_pDevice);
+
+    qint64 nFileSize = binary.getSize();
+    qint32 nNumberOfBlocks = g_pData->nHeight * g_pData->nWidth;
+    qint64 nFileBlockSize = nFileSize / (nNumberOfBlocks);
+
+    XBinary::setPdStructInit(g_pPdStruct, _nFreeIndex, nNumberOfBlocks);
+
+    if (g_pData->dataMethod == DATAMETHOD_NONE) {
+        for (qint32 i = 0; (i < nNumberOfBlocks) && (!(g_pPdStruct->bIsStop)); i++) {
+            g_pData->listParts.append(100);
+        }
+    } else if (g_pData->dataMethod == DATAMETHOD_ENTROPY) {
+        for (qint32 i = 0; (i < nNumberOfBlocks) && (!(g_pPdStruct->bIsStop)); i++) {
+
+            double dValue = 0;
+            dValue = binary.getEntropy(i * nFileBlockSize, nFileBlockSize, g_pPdStruct);
+            qint32 nValue = 100 + (200 * dValue) / 8;
+            g_pData->listParts.append(nValue);
+        }
+    }
 
     // TODO
 

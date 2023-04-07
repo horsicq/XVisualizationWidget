@@ -28,6 +28,11 @@ class XVisualization : public QObject
 {
     Q_OBJECT
 public:
+    enum DATAMETHOD {
+        DATAMETHOD_NONE,
+        DATAMETHOD_ENTROPY
+    };
+
     struct XAREA {
         qint64 nOffset;
         qint64 nSize;
@@ -39,6 +44,9 @@ public:
         qint32 nWidth;
         qint32 nHeight;
         qint32 nBlockSize;
+        QColor colorBase;
+        DATAMETHOD dataMethod;
+        QList<qint32> listParts;
         QList<XAREA> listRegions;
         QList<XAREA> listHighlights;
     };

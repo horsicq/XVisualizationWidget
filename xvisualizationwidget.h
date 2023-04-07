@@ -47,6 +47,9 @@ public:
 private slots:
     void on_horizontalSliderZoom_valueChanged(int nValue);
     void setupMatrix(qint32 nValue);
+    void on_pushButtonVisualizationSave_clicked();
+    void on_listWidgetRegions_itemSelectionChanged();
+    void on_listWidgetHighlights_itemSelectionChanged();
 
 private:
     Ui::XVisualizationWidget *ui;
