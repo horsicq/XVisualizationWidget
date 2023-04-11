@@ -35,7 +35,7 @@ public:
     struct XAREA {
         qint64 nOffset;
         qint64 nSize;
-        QString sText;
+        QString sName;
         QColor color;
     };
 
@@ -44,6 +44,7 @@ public:
         qint32 nHeight;
         qint32 nBlockSize;
         QColor colorBase;
+        XBinary::FT fileFormat;
         DATAMETHOD dataMethod;
         QList<qint32> listParts;
         QList<XAREA> listRegions;
@@ -60,7 +61,7 @@ signals:
     void completed(qint64 nElapsed);
 
 public slots:
-    void process();
+    void handleData();
 
 private:
     QIODevice *g_pDevice;

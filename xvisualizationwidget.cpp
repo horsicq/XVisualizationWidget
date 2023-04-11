@@ -69,6 +69,7 @@ void XVisualizationWidget::reload()
     g_data.nHeight = 200;   // TODO
     g_data.dataMethod = XVisualization::DATAMETHOD_ENTROPY;
     g_data.colorBase = this->palette().background().color();
+    g_data.fileFormat = (XBinary::FT)(ui->comboBoxType->currentData().toInt());
 
     if (g_pDevice) {
         DialogVisualizationProcess dvp(XOptions::getMainWidget(this));
@@ -85,12 +86,30 @@ void XVisualizationWidget::reload()
 
 void XVisualizationWidget::reloadImage()
 {
-    quint32 nDelta = 10;
+    qreal rDelta = 5;
     // TODO first add Image then descriptions
     pScene->clear();
 
-    QGraphicsTextItem *pItemRegions = new XFileDescription(QColor(Qt::yellow), "_TST_TST_");
-    pItemRegions->setPos(QPointF(0, 0));
+    qreal rRegionsSize = 0;
+
+    QList<QGraphicsTextItem *> listRegions;
+
+    {
+        qint32 nNumberOfRecords = g_data.listRegions.count();
+        qreal rPosition = 0;
+
+        for (qint32 i = 0; i < nNumberOfRecords; i++) {
+            QGraphicsTextItem *pItemRegion = new XFileDescription(g_data.listRegions.at(i).color, g_data.listRegions.at(i).sName);
+            pItemRegion->setPos(QPointF(0, rPosition));
+
+            rRegionsSize = qMax(pItemRegion->boundingRect().width(), rRegionsSize);
+
+            rPosition += pItemRegion->boundingRect().height();
+            rPosition += rDelta;
+
+            listRegions.append(pItemRegion);
+        }
+    }
 
     QImage image = XVisualization::createImage(&g_data);
 
@@ -98,14 +117,23 @@ void XVisualizationWidget::reloadImage()
 
     QGraphicsPixmapItem *pItemMain = new XFileImage(QColor(Qt::green));
     pItemMain->setPixmap(pixmap);
-    pItemMain->setPos(QPointF(pItemRegions->boundingRect().width() + nDelta, 0));
+    pItemMain->setPos(QPointF(rRegionsSize + rDelta, 0));
 
     QGraphicsTextItem *pItemHighlights = new XFileDescription(QColor(Qt::blue), "ABC");
-    pItemHighlights->setPos(QPointF(pItemRegions->boundingRect().width() + pItemMain->boundingRect().width() + 2 * nDelta, 0));
+    pItemHighlights->setPos(QPointF(rRegionsSize + pItemMain->boundingRect().width() + 2 * rDelta, 0));
 
     pScene->addItem(pItemMain);
-    pScene->addItem(pItemRegions);
+
+    {
+        qint32 nNumberOfRecords = listRegions.count();
+
+        for (qint32 i = 0; i < nNumberOfRecords; i++) {
+            pScene->addItem(listRegions.at(i));
+        }
+    }
+
     pScene->addItem(pItemHighlights);
+
 
     setupMatrix(100);  // TODO fix
     setupMatrix(250);

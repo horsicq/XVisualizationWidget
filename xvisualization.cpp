@@ -22,10 +22,14 @@
 
 XVisualization::XVisualization(QObject *pParent) : QObject(pParent)
 {
+    g_pDevice = nullptr;
+    g_pData = nullptr;
+    g_pPdStruct = nullptr;
 }
 
 QImage XVisualization::createImage(DATA *pData)
 {
+    // mb TODO
     QImage imageResult(QSize(pData->nBlockSize * pData->nWidth, pData->nBlockSize * pData->nHeight), QImage::Format_RGB32);
     QPainter painter(&imageResult);
     painter.setBrush(QBrush(Qt::green));
@@ -62,7 +66,7 @@ void XVisualization::setData(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT 
     g_pPdStruct = pPdStruct;
 }
 
-void XVisualization::process()
+void XVisualization::handleData()
 {
     QElapsedTimer scanTimer;
     scanTimer.start();
@@ -92,6 +96,26 @@ void XVisualization::process()
         }
     }
 
+    QList<XBinary::HREGION> listHRegions = XFormats::getHRegions(g_pData->fileFormat, g_pDevice, false, -1, g_pPdStruct);
+    QList<XBinary::HREGION> listHighlights = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, false, -1, g_pPdStruct);
+
+    {
+        qint32 nNumberOfRecords = listHRegions.count();
+
+        for (qint32 i = 0; i < nNumberOfRecords; i++) {
+
+            if (listHRegions.at(i).nOffset != -1) {
+                XAREA xarea = {};
+
+                xarea.color = Qt::green;
+                xarea.nOffset = listHRegions.at(i).nOffset;
+                xarea.nSize = listHRegions.at(i).nSize;
+                xarea.sName = listHRegions.at(i).sName;
+
+                g_pData->listRegions.append(xarea);
+            }
+        }
+    }
     // TODO
 
     XBinary::setPdStructFinished(g_pPdStruct, _nFreeIndex);
