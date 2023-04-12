@@ -42,9 +42,18 @@ QImage XVisualization::createImage(DATA *pData)
         for (qint32 j = 0; j < pData->nWidth; j++) {
             QRect rect(pData->nBlockSize * j, pData->nBlockSize * i, pData->nBlockSize, pData->nBlockSize);
 
+            XAREA areaRegion = isRegionPresent(pData, nIndex);
+            XAREA areaHighlight = isHighlightPresent(pData, nIndex);
+
             qint32 nValue = pData->listParts.at(nIndex);
 
-            QColor colorBlock = pData->colorBase.darker(nValue);
+            QColor colorBlock;
+
+            if (areaRegion.bIsValid) {
+                colorBlock = areaRegion.color.darker(nValue);
+            } else {
+                colorBlock = pData->colorBase.darker(nValue);
+            }
 
             painter.fillRect(rect, colorBlock);
             //            painter.drawRect(rect);
@@ -57,6 +66,38 @@ QImage XVisualization::createImage(DATA *pData)
     //    painter.fillRect(QRectF(100,100,200,100),Qt::white);
 
     return imageResult;
+}
+
+XVisualization::XAREA XVisualization::isRegionPresent(DATA *pData, qint64 nBlockIndex)
+{
+    XAREA result = {};
+
+    qint32 nCount = pData->listRegions.count();
+
+    for (qint32 i = 0; i < nCount; i++) {
+        if ((nBlockIndex >= pData->listRegions.at(i).nOffsetInBlocks) && (nBlockIndex < (pData->listRegions.at(i).nOffsetInBlocks + pData->listRegions.at(i).nSizeInBlocks))) {
+            result = pData->listRegions.at(i);
+            break;
+        }
+    }
+
+    return result;
+}
+
+XVisualization::XAREA XVisualization::isHighlightPresent(DATA *pData, qint64 nBlockIndex)
+{
+    XAREA result = {};
+
+    qint32 nCount = pData->listHighlights.count();
+
+    for (qint32 i = 0; i < nCount; i++) {
+        if ((nBlockIndex >= pData->listHighlights.at(i).nOffsetInBlocks) && (nBlockIndex < (pData->listHighlights.at(i).nOffsetInBlocks + pData->listHighlights.at(i).nSizeInBlocks))) {
+            result = pData->listHighlights.at(i);
+            break;
+        }
+    }
+
+    return result;
 }
 
 void XVisualization::setData(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT *pPdStruct)
@@ -96,29 +137,96 @@ void XVisualization::handleData()
         }
     }
 
-    QList<XBinary::HREGION> listHRegions = XFormats::getHRegions(g_pData->fileFormat, g_pDevice, false, -1, g_pPdStruct);
-    QList<XBinary::HREGION> listHighlights = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, false, -1, g_pPdStruct);
-
     {
+        QList<XBinary::HREGION> listHRegions = XFormats::getHRegions(g_pData->fileFormat, g_pDevice, false, -1, g_pPdStruct);
+
         qint32 nNumberOfRecords = listHRegions.count();
 
         for (qint32 i = 0; i < nNumberOfRecords; i++) {
 
             if (listHRegions.at(i).nOffset != -1) {
                 XAREA xarea = {};
-
-                xarea.color = Qt::green;
+                xarea.bIsValid = true;
+                xarea.color = getRegionColor(i);
                 xarea.nOffset = listHRegions.at(i).nOffset;
                 xarea.nSize = listHRegions.at(i).nSize;
+                xarea.nOffsetInBlocks = XBinary::align_down(listHRegions.at(i).nOffset, nFileBlockSize) / nFileBlockSize;
+                xarea.nSizeInBlocks = (XBinary::align_up(listHRegions.at(i).nOffset + listHRegions.at(i).nSize, nFileBlockSize) / nFileBlockSize) - xarea.nOffsetInBlocks;
                 xarea.sName = listHRegions.at(i).sName;
 
                 g_pData->listRegions.append(xarea);
             }
         }
     }
-    // TODO
+    {
+        QList<XBinary::HREGION> listHighlights = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, false, -1, g_pPdStruct);
+
+        qint32 nNumberOfRecords = listHighlights.count();
+
+        for (qint32 i = 0; i < nNumberOfRecords; i++) {
+
+            if (listHighlights.at(i).nOffset != -1) {
+                XAREA xarea = {};
+                xarea.bIsValid = true;
+                xarea.color = getHighlightColor(i);
+                xarea.nOffset = listHighlights.at(i).nOffset;
+                xarea.nSize = listHighlights.at(i).nSize;
+                xarea.nOffsetInBlocks = XBinary::align_down(listHighlights.at(i).nOffset, nFileBlockSize) / nFileBlockSize;
+                xarea.nSizeInBlocks = (XBinary::align_up(listHighlights.at(i).nOffset + listHighlights.at(i).nSize, nFileBlockSize) / nFileBlockSize) - xarea.nOffsetInBlocks;
+                xarea.sName = listHighlights.at(i).sName;
+
+                g_pData->listHighlights.append(xarea);
+            }
+        }
+    }
 
     XBinary::setPdStructFinished(g_pPdStruct, _nFreeIndex);
 
     emit completed(scanTimer.elapsed());
+}
+
+QColor XVisualization::getRegionColor(qint32 nIndex)
+{
+    QColor result = Qt::gray;
+
+    nIndex = nIndex % 5;
+
+    switch (nIndex) {
+        case 0:
+            result = Qt::green;
+            break;
+        case 1:
+            result = Qt::blue;
+            break;
+        case 2:
+            result = Qt::magenta;
+            break;
+        case 3:
+            result = Qt::yellow;
+            break;
+        case 4:
+            result = Qt::cyan;
+            break;
+        default:
+            result = Qt::gray;
+    }
+
+    return result;
+}
+
+QColor XVisualization::getHighlightColor(qint32 nIndex)
+{
+    QColor result = Qt::gray;
+
+    nIndex %= 5;
+
+    switch (nIndex) {
+        case 0:
+            result = Qt::red;
+            break;
+        default:
+            result = Qt::gray;
+    }
+
+    return result;
 }

@@ -33,8 +33,11 @@ public:
     };
 
     struct XAREA {
+        bool bIsValid;
         qint64 nOffset;
         qint64 nSize;
+        qint64 nOffsetInBlocks;
+        qint64 nSizeInBlocks;
         QString sName;
         QColor color;
     };
@@ -54,6 +57,8 @@ public:
     explicit XVisualization(QObject *pParent = nullptr);
 
     static QImage createImage(DATA *pData);
+    static XAREA isRegionPresent(DATA *pData, qint64 nBlockIndex);
+    static XAREA isHighlightPresent(DATA *pData, qint64 nBlockIndex);
     void setData(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT *pPdStruct);
 
 signals:
@@ -62,6 +67,8 @@ signals:
 
 public slots:
     void handleData();
+    static QColor getRegionColor(qint32 nIndex);
+    static QColor getHighlightColor(qint32 nIndex);
 
 private:
     QIODevice *g_pDevice;
