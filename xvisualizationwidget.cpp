@@ -91,8 +91,10 @@ void XVisualizationWidget::reloadImage()
     pScene->clear();
 
     qreal rRegionsSize = 0;
+    qreal rHighlightsSize = 0;
 
     QList<QGraphicsTextItem *> listRegions;
+    QList<QGraphicsTextItem *> listHighlights;
 
     {
         qint32 nNumberOfRecords = g_data.listRegions.count();
@@ -119,8 +121,22 @@ void XVisualizationWidget::reloadImage()
     pItemMain->setPixmap(pixmap);
     pItemMain->setPos(QPointF(rRegionsSize + rDelta, 0));
 
-    QGraphicsTextItem *pItemHighlights = new XFileDescription(QColor(Qt::blue), "ABC");
-    pItemHighlights->setPos(QPointF(rRegionsSize + pItemMain->boundingRect().width() + 2 * rDelta, 0));
+    {
+        qint32 nNumberOfRecords = g_data.listHighlights.count();
+        qreal rPosition = 0;
+
+        for (qint32 i = 0; i < nNumberOfRecords; i++) {
+            QGraphicsTextItem *pItemHighlight = new XFileDescription(g_data.listHighlights.at(i).color, g_data.listHighlights.at(i).sName);
+            pItemHighlight->setPos(QPointF(rRegionsSize + pItemMain->boundingRect().width() + 2 * rDelta, 0));
+
+            rHighlightsSize = qMax(pItemHighlight->boundingRect().width(), rHighlightsSize);
+
+            rPosition += pItemHighlight->boundingRect().height();
+            rPosition += rDelta;
+
+            listHighlights.append(pItemHighlight);
+        }
+    }
 
     pScene->addItem(pItemMain);
 
@@ -132,8 +148,13 @@ void XVisualizationWidget::reloadImage()
         }
     }
 
-    pScene->addItem(pItemHighlights);
+    {
+        qint32 nNumberOfRecords = listHighlights.count();
 
+        for (qint32 i = 0; i < nNumberOfRecords; i++) {
+            pScene->addItem(listHighlights.at(i));
+        }
+    }
 
     setupMatrix(100);  // TODO fix
     setupMatrix(250);
