@@ -45,11 +45,17 @@ QImage XVisualization::createImage(DATA *pData)
             XAREA areaRegion = isRegionPresent(pData, nIndex);
             XAREA areaHighlight = isHighlightPresent(pData, nIndex);
 
-            qint32 nValue = pData->listParts.at(nIndex);
+            qint32 nValue = 0;
+
+            if (pData->dataMethod == DATAMETHOD_NONE) {
+                nValue = pData->listParts.at(nIndex);
+            } else if (pData->dataMethod == DATAMETHOD_ENTROPY) {
+                nValue = pData->listPartsEntropy.at(nIndex);
+            }
 
             QColor colorBlock;
 
-            if (areaRegion.bIsValid) {
+            if (areaRegion.bIsEnabled) {
                 colorBlock = areaRegion.color.darker(nValue);
             } else {
                 colorBlock = pData->colorBase.darker(nValue);
@@ -75,9 +81,11 @@ XVisualization::XAREA XVisualization::isRegionPresent(DATA *pData, qint64 nBlock
     qint32 nCount = pData->listRegions.count();
 
     for (qint32 i = 0; i < nCount; i++) {
-        if ((nBlockIndex >= pData->listRegions.at(i).nOffsetInBlocks) && (nBlockIndex < (pData->listRegions.at(i).nOffsetInBlocks + pData->listRegions.at(i).nSizeInBlocks))) {
-            result = pData->listRegions.at(i);
-            break;
+        if (pData->listRegions.at(i).bIsEnabled) {
+            if ((nBlockIndex >= pData->listRegions.at(i).nOffsetInBlocks) && (nBlockIndex < (pData->listRegions.at(i).nOffsetInBlocks + pData->listRegions.at(i).nSizeInBlocks))) {
+                result = pData->listRegions.at(i);
+                break;
+            }
         }
     }
 
@@ -91,9 +99,11 @@ XVisualization::XAREA XVisualization::isHighlightPresent(DATA *pData, qint64 nBl
     qint32 nCount = pData->listHighlights.count();
 
     for (qint32 i = 0; i < nCount; i++) {
-        if ((nBlockIndex >= pData->listHighlights.at(i).nOffsetInBlocks) && (nBlockIndex < (pData->listHighlights.at(i).nOffsetInBlocks + pData->listHighlights.at(i).nSizeInBlocks))) {
-            result = pData->listHighlights.at(i);
-            break;
+        if (pData->listHighlights.at(i).bIsEnabled) {
+            if ((nBlockIndex >= pData->listHighlights.at(i).nOffsetInBlocks) && (nBlockIndex < (pData->listHighlights.at(i).nOffsetInBlocks + pData->listHighlights.at(i).nSizeInBlocks))) {
+                result = pData->listHighlights.at(i);
+                break;
+            }
         }
     }
 
@@ -113,6 +123,9 @@ void XVisualization::handleData()
     scanTimer.start();
 
     g_pData->listParts.clear();
+    g_pData->listPartsEntropy.clear();
+    g_pData->listRegions.clear();
+    g_pData->listHighlights.clear();
 
     qint32 _nFreeIndex = XBinary::getFreeIndex(g_pPdStruct);
 
@@ -124,17 +137,17 @@ void XVisualization::handleData()
 
     XBinary::setPdStructInit(g_pPdStruct, _nFreeIndex, nNumberOfBlocks);
 
-    if (g_pData->dataMethod == DATAMETHOD_NONE) {
-        for (qint32 i = 0; (i < nNumberOfBlocks) && (!(g_pPdStruct->bIsStop)); i++) {
-            g_pData->listParts.append(100);
-        }
-    } else if (g_pData->dataMethod == DATAMETHOD_ENTROPY) {
-        for (qint32 i = 0; (i < nNumberOfBlocks) && (!(g_pPdStruct->bIsStop)); i++) {
-            double dValue = 0;
-            dValue = binary.getEntropy(i * nFileBlockSize, nFileBlockSize, g_pPdStruct);
-            qint32 nValue = 100 + (200 * dValue) / 8;
-            g_pData->listParts.append(nValue);
-        }
+    for (qint32 i = 0; (i < nNumberOfBlocks) && (!(g_pPdStruct->bIsStop)); i++) {
+        g_pData->listParts.append(100);
+        XBinary::setPdStructCurrent(g_pPdStruct, _nFreeIndex, i);
+    }
+
+    for (qint32 i = 0; (i < nNumberOfBlocks) && (!(g_pPdStruct->bIsStop)); i++) {
+        double dValue = 0;
+        dValue = binary.getEntropy(i * nFileBlockSize, nFileBlockSize, g_pPdStruct);
+        qint32 nValue = 100 + (200 * dValue) / 8;
+        g_pData->listPartsEntropy.append(nValue);
+        XBinary::setPdStructCurrent(g_pPdStruct, _nFreeIndex, i);
     }
 
     {
@@ -146,7 +159,7 @@ void XVisualization::handleData()
 
             if (listHRegions.at(i).nOffset != -1) {
                 XAREA xarea = {};
-                xarea.bIsValid = true;
+                xarea.bIsEnabled = true;
                 xarea.color = getRegionColor(i);
                 xarea.nOffset = listHRegions.at(i).nOffset;
                 xarea.nSize = listHRegions.at(i).nSize;
@@ -167,7 +180,7 @@ void XVisualization::handleData()
 
             if (listHighlights.at(i).nOffset != -1) {
                 XAREA xarea = {};
-                xarea.bIsValid = true;
+                xarea.bIsEnabled = true;
                 xarea.color = getHighlightColor(i);
                 xarea.nOffset = listHighlights.at(i).nOffset;
                 xarea.nSize = listHighlights.at(i).nSize;

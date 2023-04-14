@@ -33,7 +33,7 @@ public:
     };
 
     struct XAREA {
-        bool bIsValid;
+        bool bIsEnabled;
         qint64 nOffset;
         qint64 nSize;
         qint64 nOffsetInBlocks;
@@ -50,6 +50,7 @@ public:
         XBinary::FT fileFormat;
         DATAMETHOD dataMethod;
         QList<qint32> listParts;
+        QList<qint32> listPartsEntropy;
         QList<XAREA> listRegions;
         QList<XAREA> listHighlights;
     };

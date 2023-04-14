@@ -36,6 +36,11 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : QWidget(pParent),
 
     ui->splitterVisualization->setStretchFactor(0, 1);
     ui->splitterVisualization->setStretchFactor(1, 0);
+
+    ui->comboBoxMethod->addItem("", XVisualization::DATAMETHOD_NONE);
+    ui->comboBoxMethod->addItem(tr("Entropy"), XVisualization::DATAMETHOD_ENTROPY);
+
+    ui->comboBoxMethod->setCurrentIndex(1); // Set Entropy
 }
 
 XVisualizationWidget::~XVisualizationWidget()
@@ -57,6 +62,8 @@ void XVisualizationWidget::setData(QIODevice *pDevice, XBinary::FT fileType, boo
 
 void XVisualizationWidget::reload()
 {
+    const bool bBlocked1 = ui->listWidgetRegions->blockSignals(true);
+    const bool bBlocked2 = ui->listWidgetHighlights->blockSignals(true);
     // TODO
     // Resolution
     // Method
@@ -64,100 +71,163 @@ void XVisualizationWidget::reload()
     // Get XBinary:: regions, highlights, resolution
     // TODO insert to QListWidgets
 
-    g_data.nBlockSize = 3;  // TODO
-    g_data.nWidth = 100;    // TODO
-    g_data.nHeight = 200;   // TODO
-    g_data.dataMethod = XVisualization::DATAMETHOD_ENTROPY;
-    g_data.colorBase = this->palette().background().color();
-    g_data.fileFormat = (XBinary::FT)(ui->comboBoxType->currentData().toInt());
-
     if (g_pDevice) {
-        DialogVisualizationProcess dvp(XOptions::getMainWidget(this));
 
-        dvp.setData(g_pDevice, &g_data);
+        g_data.nWidth = 100;    // TODO
+        g_data.nHeight = 200;   // TODO
+        g_data.fileFormat = (XBinary::FT)(ui->comboBoxType->currentData().toInt());
 
-        dvp.showDialogDelay();
+        if (g_pDevice) {
+            DialogVisualizationProcess dvp(XOptions::getMainWidget(this));
 
-        if (dvp.isSuccess()) {
-            reloadImage();
+            dvp.setData(g_pDevice, &g_data);
+
+            dvp.showDialogDelay();
+
+            if (dvp.isSuccess()) {
+                reloadImage();
+            }
+        }
+
+        {
+            ui->listWidgetRegions->clear();
+
+            qint32 nNumberOfRecords = g_data.listRegions.count();
+
+            for (qint32 i = 0; i < nNumberOfRecords; i++) {
+                QListWidgetItem *pItem = new QListWidgetItem;
+                pItem->setText(g_data.listRegions.at(i).sName);
+                pItem->setData(Qt::UserRole, i);
+                pItem->setCheckState(Qt::Checked);
+
+                ui->listWidgetRegions->addItem(pItem);
+            }
+        }
+
+        {
+            ui->listWidgetHighlights->clear();
+
+            qint32 nNumberOfRecords = g_data.listHighlights.count();
+
+            for (qint32 i = 0; i < nNumberOfRecords; i++) {
+                QListWidgetItem *pItem = new QListWidgetItem;
+                pItem->setText(g_data.listHighlights.at(i).sName);
+                pItem->setData(Qt::UserRole, i);
+                pItem->setCheckState(Qt::Checked);
+
+                ui->listWidgetHighlights->addItem(pItem);
+            }
         }
     }
+
+    ui->listWidgetRegions->blockSignals(bBlocked1);
+    ui->listWidgetHighlights->blockSignals(bBlocked2);
 }
 
 void XVisualizationWidget::reloadImage()
 {
-    qreal rDelta = 5;
-    // TODO first add Image then descriptions
-    pScene->clear();
+    if (g_pDevice) {
+        {
+            qint32 nNumberOfRecords = ui->listWidgetRegions->count();
 
-    qreal rRegionsSize = 0;
-    qreal rHighlightsSize = 0;
+            for (qint32 i = 0; i < nNumberOfRecords; i++) {
+                bool bIsEnabled = (ui->listWidgetRegions->item(i)->checkState() == Qt::Checked);
 
-    QList<QGraphicsTextItem *> listRegions;
-    QList<QGraphicsTextItem *> listHighlights;
-
-    {
-        qint32 nNumberOfRecords = g_data.listRegions.count();
-        qreal rPosition = 0;
-
-        for (qint32 i = 0; i < nNumberOfRecords; i++) {
-            QGraphicsTextItem *pItemRegion = new XFileDescription(g_data.listRegions.at(i).color, g_data.listRegions.at(i).sName);
-            pItemRegion->setPos(QPointF(0, rPosition));
-
-            rRegionsSize = qMax(pItemRegion->boundingRect().width(), rRegionsSize);
-
-            rPosition += pItemRegion->boundingRect().height();
-            rPosition += rDelta;
-
-            listRegions.append(pItemRegion);
+                g_data.listRegions[i].bIsEnabled = bIsEnabled;
+            }
         }
-    }
+        {
+            qint32 nNumberOfRecords = ui->listWidgetHighlights->count();
 
-    QImage image = XVisualization::createImage(&g_data);
+            for (qint32 i = 0; i < nNumberOfRecords; i++) {
+                bool bIsEnabled = (ui->listWidgetHighlights->item(i)->checkState() == Qt::Checked);
 
-    QPixmap pixmap = QPixmap::fromImage(image);
-
-    QGraphicsPixmapItem *pItemMain = new XFileImage(QColor(Qt::green));
-    pItemMain->setPixmap(pixmap);
-    pItemMain->setPos(QPointF(rRegionsSize + rDelta, 0));
-
-    {
-        qint32 nNumberOfRecords = g_data.listHighlights.count();
-        qreal rPosition = 0;
-
-        for (qint32 i = 0; i < nNumberOfRecords; i++) {
-            QGraphicsTextItem *pItemHighlight = new XFileDescription(g_data.listHighlights.at(i).color, g_data.listHighlights.at(i).sName);
-            pItemHighlight->setPos(QPointF(rRegionsSize + pItemMain->boundingRect().width() + 2 * rDelta, 0));
-
-            rHighlightsSize = qMax(pItemHighlight->boundingRect().width(), rHighlightsSize);
-
-            rPosition += pItemHighlight->boundingRect().height();
-            rPosition += rDelta;
-
-            listHighlights.append(pItemHighlight);
+                g_data.listHighlights[i].bIsEnabled = bIsEnabled;
+            }
         }
-    }
 
-    pScene->addItem(pItemMain);
+        g_data.nBlockSize = 3;  // TODO
+        g_data.colorBase = this->palette().background().color();
+        g_data.dataMethod = (XVisualization::DATAMETHOD)(ui->comboBoxMethod->currentData().toInt());
 
-    {
-        qint32 nNumberOfRecords = listRegions.count();
+        qreal rDelta = 5;
+        // TODO first add Image then descriptions
+        pScene->clear();
 
-        for (qint32 i = 0; i < nNumberOfRecords; i++) {
-            pScene->addItem(listRegions.at(i));
+        qreal rRegionsSize = 150;
+        qreal rHighlightsSize = 150;
+
+        QList<QGraphicsTextItem *> listRegions;
+        QList<QGraphicsTextItem *> listHighlights;
+
+        {
+            qint32 nNumberOfRecords = g_data.listRegions.count();
+            qreal rPosition = 0;
+
+            for (qint32 i = 0; i < nNumberOfRecords; i++) {
+                if (g_data.listRegions.at(i).bIsEnabled) {
+                    QGraphicsTextItem *pItemRegion = new XFileDescription(g_data.listRegions.at(i).color, g_data.listRegions.at(i).sName);
+                    pItemRegion->setPos(QPointF(0, rPosition));
+
+                    rRegionsSize = qMax(pItemRegion->boundingRect().width(), rRegionsSize);
+
+                    rPosition += pItemRegion->boundingRect().height();
+                    rPosition += rDelta;
+
+                    listRegions.append(pItemRegion);
+                }
+            }
         }
-    }
 
-    {
-        qint32 nNumberOfRecords = listHighlights.count();
+        QImage image = XVisualization::createImage(&g_data);
 
-        for (qint32 i = 0; i < nNumberOfRecords; i++) {
-            pScene->addItem(listHighlights.at(i));
+        QPixmap pixmap = QPixmap::fromImage(image);
+
+        QGraphicsPixmapItem *pItemMain = new XFileImage(QColor(Qt::green));
+        pItemMain->setPixmap(pixmap);
+        pItemMain->setPos(QPointF(rRegionsSize + rDelta, 0));
+
+        {
+            qint32 nNumberOfRecords = g_data.listHighlights.count();
+            qreal rPosition = 0;
+
+            for (qint32 i = 0; i < nNumberOfRecords; i++) {
+                if (g_data.listHighlights.at(i).bIsEnabled) {
+                    QGraphicsTextItem *pItemHighlight = new XFileDescription(g_data.listHighlights.at(i).color, g_data.listHighlights.at(i).sName);
+                    pItemHighlight->setPos(QPointF(rRegionsSize + pItemMain->boundingRect().width() + 2 * rDelta, 0));
+
+                    rHighlightsSize = qMax(pItemHighlight->boundingRect().width(), rHighlightsSize);
+
+                    rPosition += pItemHighlight->boundingRect().height();
+                    rPosition += rDelta;
+
+                    listHighlights.append(pItemHighlight);
+                }
+            }
         }
-    }
 
-    setupMatrix(100);  // TODO fix
-    setupMatrix(250);
+        pScene->addItem(pItemMain);
+
+        {
+            qint32 nNumberOfRecords = listRegions.count();
+
+            for (qint32 i = 0; i < nNumberOfRecords; i++) {
+                pScene->addItem(listRegions.at(i));
+            }
+        }
+
+        {
+            qint32 nNumberOfRecords = listHighlights.count();
+
+            for (qint32 i = 0; i < nNumberOfRecords; i++) {
+                pScene->addItem(listHighlights.at(i));
+            }
+        }
+
+        ui->horizontalSliderZoom->setValue(250);
+        setupMatrix(100);  // TODO fix
+        setupMatrix(250);
+    }
 }
 
 void XVisualizationWidget::on_horizontalSliderZoom_valueChanged(int nValue)
@@ -198,3 +268,18 @@ void XVisualizationWidget::on_listWidgetHighlights_itemSelectionChanged()
 {
     reloadImage();
 }
+
+void XVisualizationWidget::on_comboBoxMethod_currentIndexChanged(int nIndex)
+{
+    Q_UNUSED(nIndex)
+
+    reloadImage();
+}
+
+void XVisualizationWidget::on_listWidgetRegions_itemChanged(QListWidgetItem *pItem)
+{
+    Q_UNUSED(pItem)
+
+    reloadImage();
+}
+

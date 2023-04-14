@@ -23,6 +23,7 @@
 
 #include <QWidget>
 #include <QGraphicsScene>
+#include <QListWidgetItem>
 #include "xformats.h"
 #include "xfileimage.h"
 #include "xfiledescription.h"
@@ -49,6 +50,8 @@ private slots:
     void on_pushButtonVisualizationSave_clicked();
     void on_listWidgetRegions_itemSelectionChanged();
     void on_listWidgetHighlights_itemSelectionChanged();
+    void on_comboBoxMethod_currentIndexChanged(int nIndex);
+    void on_listWidgetRegions_itemChanged(QListWidgetItem *pItem);
 
 private:
     Ui::XVisualizationWidget *ui;
