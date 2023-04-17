@@ -41,6 +41,10 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : QWidget(pParent),
     ui->comboBoxMethod->addItem(tr("Entropy"), XVisualization::DATAMETHOD_ENTROPY);
 
     ui->comboBoxMethod->setCurrentIndex(1); // Set Entropy
+
+    ui->spinBoxWidth->setValue(100);
+    ui->spinBoxHeight->setValue(200);
+    ui->spinBoxBlockSize->setValue(3);
 }
 
 XVisualizationWidget::~XVisualizationWidget()
@@ -64,17 +68,15 @@ void XVisualizationWidget::reload()
 {
     const bool bBlocked1 = ui->listWidgetRegions->blockSignals(true);
     const bool bBlocked2 = ui->listWidgetHighlights->blockSignals(true);
-    // TODO
-    // Resolution
-    // Method
+
     // TODO
     // Get XBinary:: regions, highlights, resolution
-    // TODO insert to QListWidgets
 
     if (g_pDevice) {
+        bool bReloadImage = false;
 
-        g_data.nWidth = 100;    // TODO
-        g_data.nHeight = 200;   // TODO
+        g_data.nWidth = ui->spinBoxWidth->value();
+        g_data.nHeight = ui->spinBoxHeight->value();
         g_data.fileFormat = (XBinary::FT)(ui->comboBoxType->currentData().toInt());
 
         if (g_pDevice) {
@@ -84,9 +86,7 @@ void XVisualizationWidget::reload()
 
             dvp.showDialogDelay();
 
-            if (dvp.isSuccess()) {
-                reloadImage();
-            }
+            bReloadImage = dvp.isSuccess();
         }
 
         {
@@ -118,6 +118,10 @@ void XVisualizationWidget::reload()
                 ui->listWidgetHighlights->addItem(pItem);
             }
         }
+
+        if (bReloadImage) {
+            reloadImage();
+        }
     }
 
     ui->listWidgetRegions->blockSignals(bBlocked1);
@@ -146,7 +150,7 @@ void XVisualizationWidget::reloadImage()
             }
         }
 
-        g_data.nBlockSize = 3;  // TODO
+        g_data.nBlockSize = ui->spinBoxBlockSize->value();
         g_data.colorBase = this->palette().background().color();
         g_data.dataMethod = (XVisualization::DATAMETHOD)(ui->comboBoxMethod->currentData().toInt());
 
@@ -283,3 +287,20 @@ void XVisualizationWidget::on_listWidgetRegions_itemChanged(QListWidgetItem *pIt
     reloadImage();
 }
 
+void XVisualizationWidget::on_listWidgetHighlights_itemChanged(QListWidgetItem *pItem)
+{
+    Q_UNUSED(pItem)
+
+    reloadImage();
+}
+
+void XVisualizationWidget::on_pushButtonVisualizationReload_clicked()
+{
+    reload();
+}
+
+void XVisualizationWidget::on_spinBoxBlockSize_valueChanged(int nValue)
+{
+    Q_UNUSED(nValue)
+    reload();
+}

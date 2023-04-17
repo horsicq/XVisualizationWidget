@@ -55,7 +55,13 @@ QImage XVisualization::createImage(DATA *pData)
 
             QColor colorBlock;
 
-            if (areaRegion.bIsEnabled) {
+            if (areaHighlight, areaHighlight.bIsEnabled) {
+                if (areaHighlight.nSizeInBlocks == 1) {
+                    colorBlock = areaHighlight.color;
+                } else {
+                    colorBlock = areaHighlight.color.darker(nValue);
+                }
+            } else if (areaRegion.bIsEnabled) {
                 colorBlock = areaRegion.color.darker(nValue);
             } else {
                 colorBlock = pData->colorBase.darker(nValue);
@@ -133,7 +139,7 @@ void XVisualization::handleData()
 
     qint64 nFileSize = binary.getSize();
     qint32 nNumberOfBlocks = g_pData->nHeight * g_pData->nWidth;
-    qint64 nFileBlockSize = nFileSize / (nNumberOfBlocks);
+    double dFileBlockSize = (double)nFileSize / (nNumberOfBlocks);
 
     XBinary::setPdStructInit(g_pPdStruct, _nFreeIndex, nNumberOfBlocks);
 
@@ -144,7 +150,7 @@ void XVisualization::handleData()
 
     for (qint32 i = 0; (i < nNumberOfBlocks) && (!(g_pPdStruct->bIsStop)); i++) {
         double dValue = 0;
-        dValue = binary.getEntropy(i * nFileBlockSize, nFileBlockSize, g_pPdStruct);
+        dValue = binary.getEntropy(i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
         qint32 nValue = 100 + (200 * dValue) / 8;
         g_pData->listPartsEntropy.append(nValue);
         XBinary::setPdStructCurrent(g_pPdStruct, _nFreeIndex, i);
@@ -158,14 +164,20 @@ void XVisualization::handleData()
         for (qint32 i = 0; i < nNumberOfRecords; i++) {
 
             if (listHRegions.at(i).nOffset != -1) {
+                double dSizeInBlocks = (double)listHRegions.at(i).nSize / dFileBlockSize;
+
                 XAREA xarea = {};
                 xarea.bIsEnabled = true;
                 xarea.color = getRegionColor(i);
                 xarea.nOffset = listHRegions.at(i).nOffset;
                 xarea.nSize = listHRegions.at(i).nSize;
-                xarea.nOffsetInBlocks = XBinary::align_down(listHRegions.at(i).nOffset, nFileBlockSize) / nFileBlockSize;
-                xarea.nSizeInBlocks = (XBinary::align_up(listHRegions.at(i).nOffset + listHRegions.at(i).nSize, nFileBlockSize) / nFileBlockSize) - xarea.nOffsetInBlocks;
+                xarea.nOffsetInBlocks = (double)listHRegions.at(i).nOffset / dFileBlockSize;
+                xarea.nSizeInBlocks = dSizeInBlocks;
                 xarea.sName = listHRegions.at(i).sName;
+
+                if (dSizeInBlocks > xarea.nSizeInBlocks ) {
+                    xarea.nSizeInBlocks ++;
+                }
 
                 g_pData->listRegions.append(xarea);
             }
@@ -179,14 +191,20 @@ void XVisualization::handleData()
         for (qint32 i = 0; i < nNumberOfRecords; i++) {
 
             if (listHighlights.at(i).nOffset != -1) {
+                double dSizeInBlocks = (double)listHighlights.at(i).nSize / dFileBlockSize;
+
                 XAREA xarea = {};
                 xarea.bIsEnabled = true;
                 xarea.color = getHighlightColor(i);
                 xarea.nOffset = listHighlights.at(i).nOffset;
                 xarea.nSize = listHighlights.at(i).nSize;
-                xarea.nOffsetInBlocks = XBinary::align_down(listHighlights.at(i).nOffset, nFileBlockSize) / nFileBlockSize;
-                xarea.nSizeInBlocks = (XBinary::align_up(listHighlights.at(i).nOffset + listHighlights.at(i).nSize, nFileBlockSize) / nFileBlockSize) - xarea.nOffsetInBlocks;
+                xarea.nOffsetInBlocks = (double)listHighlights.at(i).nOffset / dFileBlockSize;
+                xarea.nSizeInBlocks = dSizeInBlocks;
                 xarea.sName = listHighlights.at(i).sName;
+
+                if (dSizeInBlocks > xarea.nSizeInBlocks ) {
+                    xarea.nSizeInBlocks ++;
+                }
 
                 g_pData->listHighlights.append(xarea);
             }

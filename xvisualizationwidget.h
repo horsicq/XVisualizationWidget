@@ -52,6 +52,9 @@ private slots:
     void on_listWidgetHighlights_itemSelectionChanged();
     void on_comboBoxMethod_currentIndexChanged(int nIndex);
     void on_listWidgetRegions_itemChanged(QListWidgetItem *pItem);
+    void on_listWidgetHighlights_itemChanged(QListWidgetItem *pItem);
+    void on_pushButtonVisualizationReload_clicked();
+    void on_spinBoxBlockSize_valueChanged(int nValue);
 
 private:
     Ui::XVisualizationWidget *ui;
