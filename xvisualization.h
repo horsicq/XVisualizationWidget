@@ -23,6 +23,7 @@
 
 #include <QPainter>
 #include "xformats.h"
+#include "xinfodb.h"
 
 class XVisualization : public QObject {
     Q_OBJECT

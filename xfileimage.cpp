@@ -22,14 +22,22 @@
 
 XFileImage::XFileImage(const QColor &color)
 {
-    this->color = color;
+    g_color = color;
+    g_pData = nullptr;
     setFlags(ItemIsSelectable | ItemIsMovable);
     setAcceptHoverEvents(true);
 }
 
 QRectF XFileImage::boundingRect() const
 {
-    return QRectF(0, 0, 300, 600);
+    QRectF rect(0, 0, 300, 600);
+
+    if (g_pData) {
+        rect.setWidth(g_pData->nWidth * g_pData->nBlockSize);
+        rect.setHeight(g_pData->nHeight * g_pData->nBlockSize);
+    }
+
+    return rect;
 }
 
 QPainterPath XFileImage::shape() const
@@ -37,6 +45,13 @@ QPainterPath XFileImage::shape() const
     QPainterPath path;
     path.addRect(boundingRect());
     return path;
+}
+
+void XFileImage::setCustomData(XVisualization::DATA *pData, QPixmap &pixmap)
+{
+    g_pData = pData;
+
+    setPixmap(pixmap);
 }
 
 // void XFileImage::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget)

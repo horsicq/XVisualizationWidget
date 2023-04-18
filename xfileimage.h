@@ -35,6 +35,7 @@ public:
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
     //    void paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget) override;
+    void setCustomData(XVisualization::DATA *pData, QPixmap &pixmap);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -42,7 +43,8 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
-    QColor color;
+    QColor g_color;
+    XVisualization::DATA *g_pData;
 };
 
 #endif  // XFILEIMAGE_H

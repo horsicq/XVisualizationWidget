@@ -30,6 +30,7 @@ class DialogVisualizationProcess : public XDialogProcess {
 public:
     explicit DialogVisualizationProcess(QWidget *pParent);
     ~DialogVisualizationProcess();
+
     void setData(QIODevice *pDevice, XVisualization::DATA *pData);
 
 private:

@@ -187,8 +187,8 @@ void XVisualizationWidget::reloadImage()
 
         QPixmap pixmap = QPixmap::fromImage(image);
 
-        QGraphicsPixmapItem *pItemMain = new XFileImage(QColor(Qt::green));
-        pItemMain->setPixmap(pixmap);
+        XFileImage *pItemMain = new XFileImage(QColor(Qt::green));
+        pItemMain->setCustomData(&g_data, pixmap);
         pItemMain->setPos(QPointF(rRegionsSize + rDelta, 0));
 
         {
@@ -198,7 +198,7 @@ void XVisualizationWidget::reloadImage()
             for (qint32 i = 0; i < nNumberOfRecords; i++) {
                 if (g_data.listHighlights.at(i).bIsEnabled) {
                     QGraphicsTextItem *pItemHighlight = new XFileDescription(g_data.listHighlights.at(i).color, g_data.listHighlights.at(i).sName);
-                    pItemHighlight->setPos(QPointF(rRegionsSize + pItemMain->boundingRect().width() + 2 * rDelta, 0));
+                    pItemHighlight->setPos(QPointF(rRegionsSize + pItemMain->boundingRect().width() + 2 * rDelta, rPosition));
 
                     rHighlightsSize = qMax(pItemHighlight->boundingRect().width(), rHighlightsSize);
 
