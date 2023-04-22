@@ -88,7 +88,8 @@ XVisualization::XAREA XVisualization::isRegionPresent(DATA *pData, qint64 nBlock
 
     for (qint32 i = 0; i < nCount; i++) {
         if (pData->listRegions.at(i).bIsEnabled) {
-            if ((nBlockIndex >= pData->listRegions.at(i).nOffsetInBlocks) && (nBlockIndex < (pData->listRegions.at(i).nOffsetInBlocks + pData->listRegions.at(i).nSizeInBlocks))) {
+            if ((nBlockIndex >= pData->listRegions.at(i).nOffsetInBlocks) &&
+                (nBlockIndex < (pData->listRegions.at(i).nOffsetInBlocks + pData->listRegions.at(i).nSizeInBlocks))) {
                 result = pData->listRegions.at(i);
                 break;
             }
@@ -106,7 +107,8 @@ XVisualization::XAREA XVisualization::isHighlightPresent(DATA *pData, qint64 nBl
 
     for (qint32 i = 0; i < nCount; i++) {
         if (pData->listHighlights.at(i).bIsEnabled) {
-            if ((nBlockIndex >= pData->listHighlights.at(i).nOffsetInBlocks) && (nBlockIndex < (pData->listHighlights.at(i).nOffsetInBlocks + pData->listHighlights.at(i).nSizeInBlocks))) {
+            if ((nBlockIndex >= pData->listHighlights.at(i).nOffsetInBlocks) &&
+                (nBlockIndex < (pData->listHighlights.at(i).nOffsetInBlocks + pData->listHighlights.at(i).nSizeInBlocks))) {
                 result = pData->listHighlights.at(i);
                 break;
             }
@@ -162,7 +164,6 @@ void XVisualization::handleData()
         qint32 nNumberOfRecords = listHRegions.count();
 
         for (qint32 i = 0; i < nNumberOfRecords; i++) {
-
             if (listHRegions.at(i).nOffset != -1) {
                 double dSizeInBlocks = (double)listHRegions.at(i).nSize / dFileBlockSize;
 
@@ -175,8 +176,8 @@ void XVisualization::handleData()
                 xarea.nSizeInBlocks = dSizeInBlocks;
                 xarea.sName = listHRegions.at(i).sName;
 
-                if (dSizeInBlocks > xarea.nSizeInBlocks ) {
-                    xarea.nSizeInBlocks ++;
+                if (dSizeInBlocks > xarea.nSizeInBlocks) {
+                    xarea.nSizeInBlocks++;
                 }
 
                 g_pData->listRegions.append(xarea);
@@ -189,7 +190,6 @@ void XVisualization::handleData()
         qint32 nNumberOfRecords = listHighlights.count();
 
         for (qint32 i = 0; i < nNumberOfRecords; i++) {
-
             if (listHighlights.at(i).nOffset != -1) {
                 double dSizeInBlocks = (double)listHighlights.at(i).nSize / dFileBlockSize;
 
@@ -202,8 +202,8 @@ void XVisualization::handleData()
                 xarea.nSizeInBlocks = dSizeInBlocks;
                 xarea.sName = listHighlights.at(i).sName;
 
-                if (dSizeInBlocks > xarea.nSizeInBlocks ) {
-                    xarea.nSizeInBlocks ++;
+                if (dSizeInBlocks > xarea.nSizeInBlocks) {
+                    xarea.nSizeInBlocks++;
                 }
 
                 g_pData->listHighlights.append(xarea);
