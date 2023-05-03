@@ -304,3 +304,9 @@ void XVisualizationWidget::on_spinBoxBlockSize_valueChanged(int nValue)
     Q_UNUSED(nValue)
     reload();
 }
+
+void XVisualizationWidget::on_comboBoxType_currentIndexChanged(int nIndex)
+{
+    Q_UNUSED(nIndex)
+    reload();
+}
