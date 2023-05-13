@@ -20,7 +20,7 @@
  */
 #include "xfiledescription.h"
 
-XFileDescription::XFileDescription(const QColor color, QString sText)
+XFileDescription::XFileDescription(const QColor color, const QString &sText)
 {
     g_color = color;
     g_sText = sText;

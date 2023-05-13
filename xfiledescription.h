@@ -30,7 +30,7 @@
 
 class XFileDescription : public QGraphicsTextItem {
 public:
-    XFileDescription(const QColor color, QString sText);
+    XFileDescription(const QColor color, const QString &sText);
 
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
