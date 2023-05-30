@@ -42,8 +42,6 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : QWidget(pParent),
 
     ui->comboBoxMethod->setCurrentIndex(1);  // Set Entropy as default
 
-    ui->spinBoxWidth->setValue(100);
-    ui->spinBoxHeight->setValue(200);
     ui->spinBoxBlockSize->setValue(3);
 }
 
@@ -58,6 +56,19 @@ void XVisualizationWidget::setData(QIODevice *pDevice, XBinary::FT fileType, boo
     this->g_pDevice = pDevice;
 
     XFormats::setFileTypeComboBox(fileType, g_pDevice, ui->comboBoxType);
+
+    qint32 nPieces = (g_pDevice->size()) / 0x300;
+
+    qint32 nWidth = 1;
+    qint32 nHeight = 1;
+
+    if (nPieces > 3) {
+        nWidth = qMin(nPieces, 100);
+        nHeight = qMin(nPieces * 2, 200);
+    }
+
+    ui->spinBoxWidth->setValue(nWidth);
+    ui->spinBoxHeight->setValue(nHeight);
 
     if (bAuto) {
         reload();
