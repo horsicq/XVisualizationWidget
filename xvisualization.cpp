@@ -225,44 +225,19 @@ QColor XVisualization::getRegionColor(qint32 nIndex)
     nIndex = nIndex % 11;
 
     switch (nIndex) {
-        case 0:
-            result = XInfoDB::stringToColor("#808000");
-            break;
-        case 1:
-            result = XInfoDB::stringToColor("#008b8b");
-            break;
-        case 2:
-            result = XInfoDB::stringToColor("#cd853f");
-            break;
-        case 3:
-            result = XInfoDB::stringToColor("#9acd32");
-            break;
-        case 4:
-            result = XInfoDB::stringToColor("#8fbc8f");
-            break;
-        case 5:
-            result = XInfoDB::stringToColor("#b03060");
-            break;
-        case 6:
-            result = XInfoDB::stringToColor("#f08080");
-            break;
-        case 7:
-            result = XInfoDB::stringToColor("#da70d6");
-            break;
-        case 8:
-            result = XInfoDB::stringToColor("#f0e68c");
-            break;
-        case 9:
-            result = XInfoDB::stringToColor("#87ceeb");
-            break;
-        case 10:
-            result = XInfoDB::stringToColor("#7b68ee");
-            break;
-        case 11:
-            result = XInfoDB::stringToColor("#fff5ee");
-            break;
-        default:
-            result = Qt::gray;
+        case 0: result = XInfoDB::stringToColor("#808000"); break;
+        case 1: result = XInfoDB::stringToColor("#008b8b"); break;
+        case 2: result = XInfoDB::stringToColor("#cd853f"); break;
+        case 3: result = XInfoDB::stringToColor("#9acd32"); break;
+        case 4: result = XInfoDB::stringToColor("#8fbc8f"); break;
+        case 5: result = XInfoDB::stringToColor("#b03060"); break;
+        case 6: result = XInfoDB::stringToColor("#f08080"); break;
+        case 7: result = XInfoDB::stringToColor("#da70d6"); break;
+        case 8: result = XInfoDB::stringToColor("#f0e68c"); break;
+        case 9: result = XInfoDB::stringToColor("#87ceeb"); break;
+        case 10: result = XInfoDB::stringToColor("#7b68ee"); break;
+        case 11: result = XInfoDB::stringToColor("#fff5ee"); break;
+        default: result = Qt::gray;
     }
 
     return result;
@@ -275,32 +250,15 @@ QColor XVisualization::getHighlightColor(qint32 nIndex)
     nIndex %= 7;
 
     switch (nIndex) {
-        case 0:
-            result = XInfoDB::stringToColor("#dc143c");
-            break;
-        case 1:
-            result = XInfoDB::stringToColor("#0000ff");
-            break;
-        case 2:
-            result = XInfoDB::stringToColor("#a020f0");
-            break;
-        case 3:
-            result = XInfoDB::stringToColor("#00ff00");
-            break;
-        case 4:
-            result = XInfoDB::stringToColor("#7f007f");
-            break;
-        case 5:
-            result = XInfoDB::stringToColor("#ff4500");
-            break;
-        case 6:
-            result = XInfoDB::stringToColor("#006400");
-            break;
-        case 7:
-            result = XInfoDB::stringToColor("##ff1493");
-            break;
-        default:
-            result = Qt::gray;
+        case 0: result = XInfoDB::stringToColor("#dc143c"); break;
+        case 1: result = XInfoDB::stringToColor("#0000ff"); break;
+        case 2: result = XInfoDB::stringToColor("#a020f0"); break;
+        case 3: result = XInfoDB::stringToColor("#00ff00"); break;
+        case 4: result = XInfoDB::stringToColor("#7f007f"); break;
+        case 5: result = XInfoDB::stringToColor("#ff4500"); break;
+        case 6: result = XInfoDB::stringToColor("#006400"); break;
+        case 7: result = XInfoDB::stringToColor("##ff1493"); break;
+        default: result = Qt::gray;
     }
 
     return result;
