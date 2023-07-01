@@ -162,7 +162,8 @@ void XVisualizationWidget::reloadImage()
         }
 
         g_data.nBlockSize = ui->spinBoxBlockSize->value();
-        g_data.colorBase = this->palette().background().color();
+        //g_data.colorBase = this->palette().background().color();
+        g_data.colorBase = this->palette().window().color();
         g_data.dataMethod = (XVisualization::DATAMETHOD)(ui->comboBoxMethod->currentData().toInt());
 
         qreal rDelta = 5;

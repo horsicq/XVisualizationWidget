@@ -55,7 +55,7 @@ QImage XVisualization::createImage(DATA *pData)
 
             QColor colorBlock;
 
-            if (areaHighlight, areaHighlight.bIsEnabled) {
+            if (areaHighlight.bIsEnabled) {
                 if (areaHighlight.nSizeInBlocks == 1) {
                     colorBlock = areaHighlight.color;
                 } else {
