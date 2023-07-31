@@ -264,7 +264,6 @@ void XVisualizationWidget::setupMatrix(qint32 nValue)
 void XVisualizationWidget::on_pushButtonVisualizationSave_clicked()
 {
     QString sFilter = XOptions::getImageFilter();
-
     QString sFileName = XBinary::getResultFileName(g_pDevice, QString("%1.png").arg(tr("Visualization")));
 
     sFileName = QFileDialog::getSaveFileName(this, tr("Save"), sFileName, sFilter);
