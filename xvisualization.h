@@ -27,6 +27,7 @@
 
 class XVisualization : public QObject {
     Q_OBJECT
+
 public:
     enum DATAMETHOD {
         DATAMETHOD_NONE,
