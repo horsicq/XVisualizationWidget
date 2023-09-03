@@ -1,9 +1,6 @@
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
-FORMS += \
-    $$PWD/xvisualizationwidget.ui
-
 HEADERS += \
     $$PWD/dialogvisualizationprocess.h \
     $$PWD/xfilearrow.h \
@@ -19,6 +16,9 @@ SOURCES += \
     $$PWD/xfileimage.cpp \
     $$PWD/xvisualization.cpp \
     $$PWD/xvisualizationwidget.cpp
+
+FORMS += \
+    $$PWD/xvisualizationwidget.ui
 
 DISTFILES += \
     $$PWD/LICENSE \
