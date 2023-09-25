@@ -47,7 +47,7 @@ void DialogVisualizationProcess::setData(QIODevice *pDevice, XVisualization::DAT
 
     connect(g_pThread, SIGNAL(started()), g_pVisualization, SLOT(handleData()));
     connect(g_pVisualization, SIGNAL(completed(qint64)), this, SLOT(onCompleted(qint64)));
-    connect(g_pVisualization, SIGNAL(errorMessage(QString)), this, SLOT(errorMessage(QString)));
+    connect(g_pVisualization, SIGNAL(errorMessage(QString)), this, SLOT(errorMessageSlot(QString)));
 
     g_pVisualization->setData(pDevice, pData, getPdStruct());
     g_pThread->start();
