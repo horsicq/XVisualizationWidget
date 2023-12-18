@@ -55,7 +55,8 @@ void XVisualizationWidget::setData(QIODevice *pDevice, XBinary::FT fileType, boo
 {
     this->g_pDevice = pDevice;
 
-    XFormats::setFileTypeComboBox(fileType, g_pDevice, ui->comboBoxType);
+    XBinary::FT _fileType = XFormats::setFileTypeComboBox(fileType, g_pDevice, ui->comboBoxType);
+    XFormats::setMapModeComboBox(_fileType, g_pDevice, false, -1, ui->comboBoxMapMode);
 
     qint32 nPieces = (g_pDevice->size()) / 0x300;
 
@@ -89,6 +90,7 @@ void XVisualizationWidget::reload()
         g_data.nWidth = ui->spinBoxWidth->value();
         g_data.nHeight = ui->spinBoxHeight->value();
         g_data.fileFormat = (XBinary::FT)(ui->comboBoxType->currentData().toInt());
+        g_data.mapMode = (XBinary::MAPMODE)(ui->comboBoxMapMode->currentData().toInt());
 
         if (g_pDevice) {
             DialogVisualizationProcess dvp(XOptions::getMainWidget(this));
@@ -317,6 +319,12 @@ void XVisualizationWidget::on_spinBoxBlockSize_valueChanged(int nValue)
 }
 
 void XVisualizationWidget::on_comboBoxType_currentIndexChanged(int nIndex)
+{
+    Q_UNUSED(nIndex)
+    reload();
+}
+
+void XVisualizationWidget::on_comboBoxMapMode_currentIndexChanged(int nIndex)
 {
     Q_UNUSED(nIndex)
     reload();

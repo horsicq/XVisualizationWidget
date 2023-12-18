@@ -50,6 +50,7 @@ public:
         qint32 nBlockSize;
         QColor colorBase;
         XBinary::FT fileFormat;
+        XBinary::MAPMODE mapMode;
         DATAMETHOD dataMethod;
         QList<qint32> listParts;
         QList<qint32> listPartsEntropy;

@@ -158,7 +158,7 @@ void XVisualization::handleData()
         XBinary::setPdStructCurrent(g_pPdStruct, _nFreeIndex, i);
     }
 
-    XBinary::_MEMORY_MAP memoryMap = XFormats::getMemoryMap(g_pData->fileFormat, g_pDevice, false, -1, g_pPdStruct);
+    XBinary::_MEMORY_MAP memoryMap = XFormats::getMemoryMap(g_pData->fileFormat, g_pData->mapMode, g_pDevice, false, -1, g_pPdStruct);
 
     {
         QList<XBinary::HREGION> listHRegions = XFormats::getHRegions(g_pData->fileFormat, g_pDevice, &memoryMap, false, -1, g_pPdStruct);

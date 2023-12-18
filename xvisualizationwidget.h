@@ -56,6 +56,7 @@ private slots:
     void on_pushButtonVisualizationReload_clicked();
     void on_spinBoxBlockSize_valueChanged(int nValue);
     void on_comboBoxType_currentIndexChanged(int nIndex);
+    void on_comboBoxMapMode_currentIndexChanged(int nIndex);
 
 private:
     Ui::XVisualizationWidget *ui;
