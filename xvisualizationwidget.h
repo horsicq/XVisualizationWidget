@@ -24,6 +24,7 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include <QListWidgetItem>
+#include <QtMath>
 #include "xformats.h"
 #include "xfileimage.h"
 #include "xfiledescription.h"
