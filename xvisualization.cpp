@@ -48,9 +48,11 @@ QImage XVisualization::createImage(DATA *pData)
             qint32 nValue = 0;
 
             if (pData->dataMethod == DATAMETHOD_NONE) {
-                nValue = pData->listParts.at(nIndex);
+                nValue = pData->listParts.at(nIndex).nNone;
             } else if (pData->dataMethod == DATAMETHOD_ENTROPY) {
-                nValue = pData->listPartsEntropy.at(nIndex);
+                nValue = pData->listParts.at(nIndex).nEntropy;
+            } else if (pData->dataMethod == DATAMETHOD_ZEROS) {
+                nValue = pData->listParts.at(nIndex).nZero;
             }
 
             QColor colorBlock;
@@ -131,7 +133,6 @@ void XVisualization::handleData()
     scanTimer.start();
 
     g_pData->listParts.clear();
-    g_pData->listPartsEntropy.clear();
     g_pData->listRegions.clear();
     g_pData->listHighlights.clear();
 
@@ -146,15 +147,16 @@ void XVisualization::handleData()
     XBinary::setPdStructInit(g_pPdStruct, _nFreeIndex, nNumberOfBlocks);
 
     for (qint32 i = 0; (i < nNumberOfBlocks) && (!(g_pPdStruct->bIsStop)); i++) {
-        g_pData->listParts.append(100);
-        XBinary::setPdStructCurrent(g_pPdStruct, _nFreeIndex, i);
-    }
+        PART part = {};
+        part.nNone = 100;
+        double dEntropy = binary.getEntropy(i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
+        part.nEntropy = 100 + (200 * dEntropy) / 8;
 
-    for (qint32 i = 0; (i < nNumberOfBlocks) && (!(g_pPdStruct->bIsStop)); i++) {
-        double dValue = 0;
-        dValue = binary.getEntropy(i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
-        qint32 nValue = 100 + (200 * dValue) / 8;
-        g_pData->listPartsEntropy.append(nValue);
+        double dZero = binary.getZeroStatus(i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
+
+        part.nZero = 100 + (200 * (1 - dZero));
+
+        g_pData->listParts.append(part);
         XBinary::setPdStructCurrent(g_pPdStruct, _nFreeIndex, i);
     }
 

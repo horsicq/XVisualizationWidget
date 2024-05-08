@@ -31,7 +31,11 @@ class XVisualization : public QObject {
 public:
     enum DATAMETHOD {
         DATAMETHOD_NONE,
-        DATAMETHOD_ENTROPY
+        DATAMETHOD_ENTROPY,
+        DATAMETHOD_ZEROS
+        // TODO printable chars
+        // TODO code
+        // TODO zeroes
     };
 
     struct XAREA {
@@ -44,6 +48,12 @@ public:
         QColor color;
     };
 
+    struct PART {
+        qint16 nNone;
+        qint16 nEntropy;
+        qint16 nZero;
+    };
+
     struct DATA {
         qint32 nWidth;
         qint32 nHeight;
@@ -52,8 +62,7 @@ public:
         XBinary::FT fileFormat;
         XBinary::MAPMODE mapMode;
         DATAMETHOD dataMethod;
-        QList<qint32> listParts;
-        QList<qint32> listPartsEntropy;
+        QList<PART> listParts;
         QList<XAREA> listRegions;
         QList<XAREA> listHighlights;
     };

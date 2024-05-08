@@ -39,6 +39,7 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : QWidget(pParent),
 
     ui->comboBoxMethod->addItem("", XVisualization::DATAMETHOD_NONE);
     ui->comboBoxMethod->addItem(tr("Entropy"), XVisualization::DATAMETHOD_ENTROPY);
+    ui->comboBoxMethod->addItem(tr("Zeros"), XVisualization::DATAMETHOD_ZEROS);
 
     ui->comboBoxMethod->setCurrentIndex(1);  // Set Entropy as default
 
