@@ -53,6 +53,8 @@ QImage XVisualization::createImage(DATA *pData)
                 nValue = pData->listParts.at(nIndex).nEntropy;
             } else if (pData->dataMethod == DATAMETHOD_ZEROS) {
                 nValue = pData->listParts.at(nIndex).nZero;
+            } else if (pData->dataMethod == DATAMETHOD_ZEROS_GRADIENT) {
+                nValue = pData->listParts.at(nIndex).nZeroGradient;
             }
 
             QColor colorBlock;
@@ -154,7 +156,13 @@ void XVisualization::handleData()
 
         double dZero = binary.getZeroStatus(i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
 
-        part.nZero = 100 + (200 * (1 - dZero));
+        part.nZeroGradient = 100 + (200 * (1 - dZero));
+
+        if (dZero == 1) {
+            part.nZero = 100;
+        } else {
+            part.nZero = 300;
+        }
 
         g_pData->listParts.append(part);
         XBinary::setPdStructCurrent(g_pPdStruct, _nFreeIndex, i);

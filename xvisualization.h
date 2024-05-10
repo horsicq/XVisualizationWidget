@@ -32,7 +32,8 @@ public:
     enum DATAMETHOD {
         DATAMETHOD_NONE,
         DATAMETHOD_ENTROPY,
-        DATAMETHOD_ZEROS
+        DATAMETHOD_ZEROS,
+        DATAMETHOD_ZEROS_GRADIENT
         // TODO printable chars
         // TODO code
         // TODO zeroes
@@ -52,6 +53,7 @@ public:
         qint16 nNone;
         qint16 nEntropy;
         qint16 nZero;
+        qint16 nZeroGradient;
     };
 
     struct DATA {

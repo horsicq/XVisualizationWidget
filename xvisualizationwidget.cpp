@@ -40,6 +40,7 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : QWidget(pParent),
     ui->comboBoxMethod->addItem("", XVisualization::DATAMETHOD_NONE);
     ui->comboBoxMethod->addItem(tr("Entropy"), XVisualization::DATAMETHOD_ENTROPY);
     ui->comboBoxMethod->addItem(tr("Zeros"), XVisualization::DATAMETHOD_ZEROS);
+    ui->comboBoxMethod->addItem(QString("%1(%2)").arg(tr("Zeros"), tr("Gradient")), XVisualization::DATAMETHOD_ZEROS_GRADIENT);
 
     ui->comboBoxMethod->setCurrentIndex(1);  // Set Entropy as default
 
@@ -201,6 +202,9 @@ void XVisualizationWidget::reloadImage()
         QImage image = XVisualization::createImage(&g_data);
 
         QPixmap pixmap = QPixmap::fromImage(image);
+
+        ui->labelImage->setPixmap(pixmap);
+        ui->labelImage->setScaledContents(true);
 
         XFileImage *pItemMain = new XFileImage(QColor(Qt::green));
         pItemMain->setCustomData(&g_data, pixmap);
