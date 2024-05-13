@@ -14,4 +14,6 @@ set(XVISUALIZATIONWIDGET_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/xvisualizationwidget.cpp
     ${CMAKE_CURRENT_LIST_DIR}/xvisualizationwidget.h
     ${CMAKE_CURRENT_LIST_DIR}/xvisualizationwidget.ui
+    ${CMAKE_CURRENT_LIST_DIR}/xvisualizationimage.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/xvisualizationimage.h
     )

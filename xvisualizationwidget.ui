@@ -197,11 +197,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QLabel" name="labelImage">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
+         <widget class="XVisualizationImage" name="widgetImage" native="true"/>
         </item>
        </layout>
       </widget>
@@ -382,6 +378,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>XVisualizationImage</class>
+   <extends>QWidget</extends>
+   <header>xvisualizationimage.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

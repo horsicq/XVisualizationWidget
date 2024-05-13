@@ -7,6 +7,7 @@ HEADERS += \
     $$PWD/xfiledescription.h \
     $$PWD/xfileimage.h \
     $$PWD/xvisualization.h \
+    $$PWD/xvisualizationimage.h \
     $$PWD/xvisualizationwidget.h
 
 SOURCES += \
@@ -15,6 +16,7 @@ SOURCES += \
     $$PWD/xfiledescription.cpp \
     $$PWD/xfileimage.cpp \
     $$PWD/xvisualization.cpp \
+    $$PWD/xvisualizationimage.cpp \
     $$PWD/xvisualizationwidget.cpp
 
 FORMS += \

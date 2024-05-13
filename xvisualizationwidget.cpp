@@ -203,8 +203,7 @@ void XVisualizationWidget::reloadImage()
 
         QPixmap pixmap = QPixmap::fromImage(image);
 
-        ui->labelImage->setPixmap(pixmap);
-        ui->labelImage->setScaledContents(true);
+        ui->widgetImage->setData(&g_data);
 
         XFileImage *pItemMain = new XFileImage(QColor(Qt::green));
         pItemMain->setCustomData(&g_data, pixmap);
