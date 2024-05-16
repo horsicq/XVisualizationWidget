@@ -22,7 +22,6 @@
 
 XVisualizationImage::XVisualizationImage(QWidget *pParent) : QWidget(pParent)
 {
-
 }
 
 void XVisualizationImage::setData(XVisualization::DATA *pData)
@@ -37,7 +36,7 @@ void XVisualizationImage::setData(XVisualization::DATA *pData)
 
 void XVisualizationImage::paintEvent(QPaintEvent *pEvent)
 {
-     QPainter *pPainter = new QPainter(this);
+    QPainter *pPainter = new QPainter(this);
 
-     pPainter->drawPixmap(pEvent->rect(), g_pixmap);
+    pPainter->drawPixmap(pEvent->rect(), g_pixmap);
 }

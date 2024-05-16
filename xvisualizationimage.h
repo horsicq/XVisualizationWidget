@@ -25,8 +25,7 @@
 #include <QPaintEvent>
 #include "xvisualization.h"
 
-class XVisualizationImage : public QWidget
-{
+class XVisualizationImage : public QWidget {
     Q_OBJECT
 public:
     explicit XVisualizationImage(QWidget *pParent = nullptr);
@@ -41,4 +40,4 @@ private:
     QPixmap g_pixmap;
 };
 
-#endif // XVISUALIZATIONIMAGE_H
+#endif  // XVISUALIZATIONIMAGE_H
