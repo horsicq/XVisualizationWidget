@@ -39,4 +39,6 @@ void XVisualizationImage::paintEvent(QPaintEvent *pEvent)
     QPainter *pPainter = new QPainter(this);
 
     pPainter->drawPixmap(pEvent->rect(), g_pixmap);
+
+    delete pPainter;
 }
