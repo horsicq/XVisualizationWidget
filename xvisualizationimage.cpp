@@ -34,6 +34,11 @@ void XVisualizationImage::setData(XVisualization::DATA *pData)
     update();
 }
 
+QPixmap XVisualizationImage::getPixmap()
+{
+    return g_pixmap;
+}
+
 void XVisualizationImage::paintEvent(QPaintEvent *pEvent)
 {
     QPainter *pPainter = new QPainter(this);

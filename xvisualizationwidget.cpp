@@ -275,8 +275,13 @@ void XVisualizationWidget::on_pushButtonVisualizationSave_clicked()
     sFileName = QFileDialog::getSaveFileName(this, tr("Save"), sFileName, sFilter);
 
     if (!sFileName.isEmpty()) {
-        QPixmap pixMap = ui->graphicsViewResult->viewport()->grab();
-        pixMap.save(sFileName);
+        if (ui->tabWidgetVisualization->currentIndex() == 1) {
+            QPixmap pixMap = ui->widgetImage->getPixmap();
+            pixMap.save(sFileName);
+        } else if (ui->tabWidgetVisualization->currentIndex() == 1) {
+            QPixmap pixMap = ui->graphicsViewResult->viewport()->grab();
+            pixMap.save(sFileName);
+        }
     }
 }
 

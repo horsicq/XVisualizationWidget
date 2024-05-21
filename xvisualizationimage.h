@@ -31,6 +31,7 @@ public:
     explicit XVisualizationImage(QWidget *pParent = nullptr);
 
     void setData(XVisualization::DATA *pData);
+    QPixmap getPixmap();
 
 protected:
     virtual void paintEvent(QPaintEvent *pEvent) override;
