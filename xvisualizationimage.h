@@ -23,6 +23,7 @@
 
 #include <QFrame>
 #include <QPaintEvent>
+#include <QMouseEvent>
 #include "xvisualization.h"
 
 class XVisualizationImage : public QWidget {
@@ -35,6 +36,7 @@ public:
 
 protected:
     virtual void paintEvent(QPaintEvent *pEvent) override;
+    virtual void mousePressEvent(QMouseEvent *pEvent) override;
 
 private:
     XVisualization::DATA g_data;

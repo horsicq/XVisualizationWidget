@@ -55,6 +55,12 @@ QImage XVisualization::createImage(DATA *pData)
                 nValue = pData->listParts.at(nIndex).nZero;
             } else if (pData->dataMethod == DATAMETHOD_ZEROS_GRADIENT) {
                 nValue = pData->listParts.at(nIndex).nZeroGradient;
+            } else if (pData->dataMethod == DATAMETHOD_GRADIENT) {
+                nValue = pData->listParts.at(nIndex).nGradient;
+            } else if (pData->dataMethod == DATAMETHOD_TEXT) {
+                nValue = pData->listParts.at(nIndex).nText;
+            } else if (pData->dataMethod == DATAMETHOD_TEXT_GRADIENT) {
+                nValue = pData->listParts.at(nIndex).nTextGradient;
             }
 
             QColor colorBlock;
@@ -151,17 +157,26 @@ void XVisualization::handleData()
     for (qint32 i = 0; (i < nNumberOfBlocks) && (!(g_pPdStruct->bIsStop)); i++) {
         PART part = {};
         part.nNone = 100;
-        double dEntropy = binary.getEntropy(i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
-        part.nEntropy = 100 + (200 * dEntropy) / 8;
+        double dEntropy = binary.getBinaryStatus(XBinary::BSTATUS_ENTROPY, i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
+        double dZero = binary.getBinaryStatus(XBinary::BSTATUS_ZERO, i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
+        double dGradient = binary.getBinaryStatus(XBinary::BSTATUS_GRADIENT, i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
+        double dText = binary.getBinaryStatus(XBinary::BSTATUS_TEXT, i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
 
-        double dZero = binary.getZeroStatus(i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
+        part.nEntropy = 100 + (200.0 * dEntropy) / 8.0;
+        part.nZeroGradient = 100 + (200.0 * dZero);
+        part.nGradient = 100 + (200.0 * dGradient);
+        part.nTextGradient = 100 + (200.0 * dText);
 
-        part.nZeroGradient = 100 + (200 * (1 - dZero));
-
-        if (dZero == 1) {
-            part.nZero = 100;
-        } else {
+        if (dZero == 1.0) {
             part.nZero = 300;
+        } else {
+            part.nZero = 100;
+        }
+
+        if (dText == 1.0) {
+            part.nText = 300;
+        } else {
+            part.nText = 100;
         }
 
         g_pData->listParts.append(part);

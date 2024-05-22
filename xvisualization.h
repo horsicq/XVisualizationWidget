@@ -32,11 +32,12 @@ public:
     enum DATAMETHOD {
         DATAMETHOD_NONE,
         DATAMETHOD_ENTROPY,
+        DATAMETHOD_GRADIENT,
         DATAMETHOD_ZEROS,
-        DATAMETHOD_ZEROS_GRADIENT
-        // TODO printable chars
+        DATAMETHOD_ZEROS_GRADIENT,
+        DATAMETHOD_TEXT,
+        DATAMETHOD_TEXT_GRADIENT,
         // TODO code
-        // TODO zeroes
     };
 
     struct XAREA {
@@ -54,6 +55,9 @@ public:
         qint16 nEntropy;
         qint16 nZero;
         qint16 nZeroGradient;
+        qint16 nGradient;
+        qint16 nText;
+        qint16 nTextGradient;
     };
 
     struct DATA {

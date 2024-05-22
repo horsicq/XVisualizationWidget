@@ -45,5 +45,21 @@ void XVisualizationImage::paintEvent(QPaintEvent *pEvent)
 
     pPainter->drawPixmap(pEvent->rect(), g_pixmap);
 
+    // TODO
+
     delete pPainter;
+}
+
+void XVisualizationImage::mousePressEvent(QMouseEvent *pEvent)
+{
+    qint32 nWidth= width();
+    qint32 nHeight = height();
+    qint32 nX = pEvent->x();
+    qint32 nY = pEvent->y();
+
+    qint32 _nY = (nY * g_data.nHeight) / nHeight;
+    qint32 _nX = (nX * g_data.nWidth) / nWidth;
+
+    qDebug("X: %d", _nY);
+    qDebug("Y: %d", _nX);
 }

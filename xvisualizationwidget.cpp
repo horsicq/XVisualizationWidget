@@ -39,8 +39,11 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : QWidget(pParent),
 
     ui->comboBoxMethod->addItem("", XVisualization::DATAMETHOD_NONE);
     ui->comboBoxMethod->addItem(tr("Entropy"), XVisualization::DATAMETHOD_ENTROPY);
+    ui->comboBoxMethod->addItem(tr("Gradient"), XVisualization::DATAMETHOD_GRADIENT);
     ui->comboBoxMethod->addItem(tr("Zeros"), XVisualization::DATAMETHOD_ZEROS);
     ui->comboBoxMethod->addItem(QString("%1(%2)").arg(tr("Zeros"), tr("Gradient")), XVisualization::DATAMETHOD_ZEROS_GRADIENT);
+    ui->comboBoxMethod->addItem(tr("Text"), XVisualization::DATAMETHOD_TEXT);
+    ui->comboBoxMethod->addItem(QString("%1(%2)").arg(tr("Text"), tr("Gradient")), XVisualization::DATAMETHOD_TEXT_GRADIENT);
 
     ui->comboBoxMethod->setCurrentIndex(1);  // Set Entropy as default
 
@@ -275,7 +278,7 @@ void XVisualizationWidget::on_pushButtonVisualizationSave_clicked()
     sFileName = QFileDialog::getSaveFileName(this, tr("Save"), sFileName, sFilter);
 
     if (!sFileName.isEmpty()) {
-        if (ui->tabWidgetVisualization->currentIndex() == 1) {
+        if (ui->tabWidgetVisualization->currentIndex() == 0) {
             QPixmap pixMap = ui->widgetImage->getPixmap();
             pixMap.save(sFileName);
         } else if (ui->tabWidgetVisualization->currentIndex() == 1) {
