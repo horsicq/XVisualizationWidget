@@ -22,6 +22,7 @@
 
 XVisualizationImage::XVisualizationImage(QWidget *pParent) : QWidget(pParent)
 {
+    _clear();
 }
 
 void XVisualizationImage::setData(XVisualization::DATA *pData)
@@ -31,6 +32,13 @@ void XVisualizationImage::setData(XVisualization::DATA *pData)
     QImage image = XVisualization::createImage(&g_data);
     g_pixmap = QPixmap::fromImage(image);
 
+    adjust();
+    update();
+}
+
+void XVisualizationImage::clear()
+{
+    _clear();
     update();
 }
 
@@ -39,27 +47,69 @@ QPixmap XVisualizationImage::getPixmap()
     return g_pixmap;
 }
 
+void XVisualizationImage::adjust()
+{
+    qint32 nIndex = ((g_data.nWidth * g_nY) + g_nX);
+
+    qint64 nOffset = 0;
+
+    if (nIndex < g_data.nWidth * g_data.nHeight) {
+        nOffset = g_data.listParts.at(nIndex).nOffset;
+    }
+
+    qDebug("Offset: %x = %d", nOffset, (qint32)nOffset);
+}
+
+void XVisualizationImage::_clear()
+{
+    g_nY = 0;
+    g_nX = 0;
+    g_data = {};
+    g_pixmap = QPixmap();
+}
+
 void XVisualizationImage::paintEvent(QPaintEvent *pEvent)
 {
     QPainter *pPainter = new QPainter(this);
 
     pPainter->drawPixmap(pEvent->rect(), g_pixmap);
 
-    // TODO
+    if (g_data.nWidth > 0) {
+        qint32 nWidth = width();
+        qint32 nHeight = height();
+
+        double dRectWidth = (double)nWidth / (double)g_data.nWidth;
+        double dRectHeight = (double)nHeight /(double) g_data.nHeight;
+        double dX = (double)(g_nX * nWidth) / (double)g_data.nWidth;
+        double dY = (double)(g_nY * nHeight) / (double)g_data.nHeight;
+
+        QRectF rect;
+
+        rect.setLeft(dX);
+        rect.setTop(dY);
+        rect.setWidth(dRectWidth);
+        rect.setHeight(dRectHeight);
+
+        pPainter->fillRect(rect, QBrush(Qt::red));
+    }
 
     delete pPainter;
 }
 
 void XVisualizationImage::mousePressEvent(QMouseEvent *pEvent)
-{
-    qint32 nWidth = width();
-    qint32 nHeight = height();
+{ 
     qint32 nX = pEvent->x();
     qint32 nY = pEvent->y();
 
-    qint32 _nY = (nY * g_data.nHeight) / nHeight;
-    qint32 _nX = (nX * g_data.nWidth) / nWidth;
+    g_nY = (nY * g_data.nHeight) / height();
+    g_nX = (nX * g_data.nWidth) / width();
 
-    qDebug("X: %d", _nY);
-    qDebug("Y: %d", _nX);
+    adjust();
+    update();
+}
+
+void XVisualizationImage::resizeEvent(QResizeEvent *pEvent)
+{
+    adjust();
+    QWidget::resizeEvent(pEvent);
 }

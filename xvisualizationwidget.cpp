@@ -26,10 +26,10 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : QWidget(pParent),
     ui->setupUi(this);
 
     g_pDevice = nullptr;
-    pScene = new QGraphicsScene(this);
+    g_pScene = new QGraphicsScene(this);
 
     ui->graphicsViewResult->setDragMode(QGraphicsView::RubberBandDrag);
-    ui->graphicsViewResult->setScene(pScene);
+    ui->graphicsViewResult->setScene(g_pScene);
 
     ui->horizontalSliderZoom->setMaximum(500);
     ui->horizontalSliderZoom->setValue(250);
@@ -52,7 +52,7 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : QWidget(pParent),
 
 XVisualizationWidget::~XVisualizationWidget()
 {
-    delete pScene;
+    delete g_pScene;
     delete ui;
 }
 
@@ -60,17 +60,19 @@ void XVisualizationWidget::setData(QIODevice *pDevice, XBinary::FT fileType, boo
 {
     this->g_pDevice = pDevice;
 
-    XBinary::FT _fileType = XFormats::setFileTypeComboBox(fileType, g_pDevice, ui->comboBoxType);
-    XFormats::setMapModeComboBox(_fileType, g_pDevice, false, -1, ui->comboBoxMapMode);
-
-    qint32 nPieces = (g_pDevice->size()) / 0x300;
-
     qint32 nWidth = 1;
     qint32 nHeight = 1;
 
-    if (nPieces > 3) {
-        nWidth = qMin(nPieces, 100);
-        nHeight = qMin(nPieces * 2, 200);
+    if (g_pDevice) {
+        XBinary::FT _fileType = XFormats::setFileTypeComboBox(fileType, g_pDevice, ui->comboBoxType);
+        XFormats::setMapModeComboBox(_fileType, g_pDevice, false, -1, ui->comboBoxMapMode);
+
+        qint32 nPieces = (g_pDevice->size()) / 0x300;
+
+        if (nPieces > 3) {
+            nWidth = qMin(nPieces, 100);
+            nHeight = qMin(nPieces * 2, 200);
+        }
     }
 
     ui->spinBoxWidth->setValue(nWidth);
@@ -88,10 +90,9 @@ void XVisualizationWidget::reload()
 
     // TODO
     // Get XBinary:: regions, highlights, resolution
+    bool bReloadImage = false;
 
     if (g_pDevice) {
-        bool bReloadImage = false;
-
         g_data.nWidth = ui->spinBoxWidth->value();
         g_data.nHeight = ui->spinBoxHeight->value();
         g_data.fileFormat = (XBinary::FT)(ui->comboBoxType->currentData().toInt());
@@ -136,10 +137,12 @@ void XVisualizationWidget::reload()
                 ui->listWidgetHighlights->addItem(pItem);
             }
         }
+    } else {
+        bReloadImage = true;
+    }
 
-        if (bReloadImage) {
-            reloadImage();
-        }
+    if (bReloadImage) {
+        reloadImage();
     }
 
     ui->listWidgetRegions->blockSignals(bBlocked1);
@@ -148,6 +151,8 @@ void XVisualizationWidget::reload()
 
 void XVisualizationWidget::reloadImage()
 {
+    g_pScene->clear();
+
     if (g_pDevice) {
         {
             qint32 nNumberOfRecords = ui->listWidgetRegions->count();
@@ -175,7 +180,6 @@ void XVisualizationWidget::reloadImage()
 
         qreal rDelta = 5;
         // TODO first add Image then descriptions
-        pScene->clear();
 
         qreal rRegionsSize = 150;
         qreal rHighlightsSize = 150;
@@ -206,8 +210,6 @@ void XVisualizationWidget::reloadImage()
 
         QPixmap pixmap = QPixmap::fromImage(image);
 
-        ui->widgetImage->setData(&g_data);
-
         XFileImage *pItemMain = new XFileImage(QColor(Qt::green));
         pItemMain->setCustomData(&g_data, pixmap);
         pItemMain->setPos(QPointF(rRegionsSize + rDelta, 0));
@@ -231,13 +233,13 @@ void XVisualizationWidget::reloadImage()
             }
         }
 
-        pScene->addItem(pItemMain);
+        g_pScene->addItem(pItemMain);
 
         {
             qint32 nNumberOfRecords = listRegions.count();
 
             for (qint32 i = 0; i < nNumberOfRecords; i++) {
-                pScene->addItem(listRegions.at(i));
+                g_pScene->addItem(listRegions.at(i));
             }
         }
 
@@ -245,13 +247,17 @@ void XVisualizationWidget::reloadImage()
             qint32 nNumberOfRecords = listHighlights.count();
 
             for (qint32 i = 0; i < nNumberOfRecords; i++) {
-                pScene->addItem(listHighlights.at(i));
+                g_pScene->addItem(listHighlights.at(i));
             }
         }
 
         ui->horizontalSliderZoom->setValue(250);
         setupMatrix(100);  // TODO fix
         setupMatrix(250);
+
+        ui->widgetImage->setData(&g_data);
+    } else {
+        ui->widgetImage->clear();
     }
 }
 

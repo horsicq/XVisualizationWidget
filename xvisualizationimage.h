@@ -32,15 +32,23 @@ public:
     explicit XVisualizationImage(QWidget *pParent = nullptr);
 
     void setData(XVisualization::DATA *pData);
+    void clear();
     QPixmap getPixmap();
+
+private:
+    void adjust();
+    void _clear();
 
 protected:
     virtual void paintEvent(QPaintEvent *pEvent) override;
     virtual void mousePressEvent(QMouseEvent *pEvent) override;
+    virtual void resizeEvent(QResizeEvent *pEvent) override;
 
 private:
     XVisualization::DATA g_data;
     QPixmap g_pixmap;
+    qint32 g_nY;
+    qint32 g_nX;
 };
 
 #endif  // XVISUALIZATIONIMAGE_H

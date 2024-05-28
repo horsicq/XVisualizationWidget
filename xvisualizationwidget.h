@@ -62,7 +62,7 @@ private slots:
 private:
     Ui::XVisualizationWidget *ui;
     QIODevice *g_pDevice;
-    QGraphicsScene *pScene;
+    QGraphicsScene *g_pScene;
     XVisualization::DATA g_data;
 };
 

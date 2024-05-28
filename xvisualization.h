@@ -37,6 +37,7 @@ public:
         DATAMETHOD_ZEROS_GRADIENT,
         DATAMETHOD_TEXT,
         DATAMETHOD_TEXT_GRADIENT,
+        __SIZE_DATAMETHOD
         // TODO code
     };
 
@@ -51,19 +52,19 @@ public:
     };
 
     struct PART {
-        qint16 nNone;
-        qint16 nEntropy;
-        qint16 nZero;
-        qint16 nZeroGradient;
-        qint16 nGradient;
-        qint16 nText;
-        qint16 nTextGradient;
+        qint16 nValue[__SIZE_DATAMETHOD];
+        qint64 nOffset;
+        double dEntropy;
+        double dZeros;
+        double dGradient;
+        double dText;
     };
 
     struct DATA {
         qint32 nWidth;
         qint32 nHeight;
         qint32 nBlockSize;
+        qint32 nFileBlockSize;
         QColor colorBase;
         XBinary::FT fileFormat;
         XBinary::MAPMODE mapMode;

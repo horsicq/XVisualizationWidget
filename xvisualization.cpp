@@ -47,21 +47,7 @@ QImage XVisualization::createImage(DATA *pData)
 
             qint32 nValue = 0;
 
-            if (pData->dataMethod == DATAMETHOD_NONE) {
-                nValue = pData->listParts.at(nIndex).nNone;
-            } else if (pData->dataMethod == DATAMETHOD_ENTROPY) {
-                nValue = pData->listParts.at(nIndex).nEntropy;
-            } else if (pData->dataMethod == DATAMETHOD_ZEROS) {
-                nValue = pData->listParts.at(nIndex).nZero;
-            } else if (pData->dataMethod == DATAMETHOD_ZEROS_GRADIENT) {
-                nValue = pData->listParts.at(nIndex).nZeroGradient;
-            } else if (pData->dataMethod == DATAMETHOD_GRADIENT) {
-                nValue = pData->listParts.at(nIndex).nGradient;
-            } else if (pData->dataMethod == DATAMETHOD_TEXT) {
-                nValue = pData->listParts.at(nIndex).nText;
-            } else if (pData->dataMethod == DATAMETHOD_TEXT_GRADIENT) {
-                nValue = pData->listParts.at(nIndex).nTextGradient;
-            }
+            nValue = pData->listParts.at(nIndex).nValue[pData->dataMethod];
 
             QColor colorBlock;
 
@@ -151,32 +137,34 @@ void XVisualization::handleData()
     qint64 nFileSize = binary.getSize();
     qint32 nNumberOfBlocks = g_pData->nHeight * g_pData->nWidth;
     double dFileBlockSize = (double)nFileSize / (nNumberOfBlocks);
+    g_pData->nFileBlockSize = dFileBlockSize;
 
     XBinary::setPdStructInit(g_pPdStruct, _nFreeIndex, nNumberOfBlocks);
 
     for (qint32 i = 0; (i < nNumberOfBlocks) && (!(g_pPdStruct->bIsStop)); i++) {
         PART part = {};
-        part.nNone = 100;
-        double dEntropy = binary.getBinaryStatus(XBinary::BSTATUS_ENTROPY, i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
-        double dZero = binary.getBinaryStatus(XBinary::BSTATUS_ZERO, i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
-        double dGradient = binary.getBinaryStatus(XBinary::BSTATUS_GRADIENT, i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
-        double dText = binary.getBinaryStatus(XBinary::BSTATUS_TEXT, i * dFileBlockSize, dFileBlockSize, g_pPdStruct);
+        part.nOffset = i * dFileBlockSize;
+        part.nValue[DATAMETHOD_NONE] = 100;
+        part.dEntropy = binary.getBinaryStatus(XBinary::BSTATUS_ENTROPY, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
+        part.dZeros = binary.getBinaryStatus(XBinary::BSTATUS_ZEROS, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
+        part.dGradient = binary.getBinaryStatus(XBinary::BSTATUS_GRADIENT, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
+        part.dText = binary.getBinaryStatus(XBinary::BSTATUS_TEXT, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
 
-        part.nEntropy = 100 + (200.0 * dEntropy) / 8.0;
-        part.nZeroGradient = 100 + (200.0 * dZero);
-        part.nGradient = 100 + (200.0 * dGradient);
-        part.nTextGradient = 100 + (200.0 * dText);
+        part.nValue[DATAMETHOD_ENTROPY] = 100 + (200.0 * part.dEntropy) / 8.0;
+        part.nValue[DATAMETHOD_ZEROS_GRADIENT] = 100 + (200.0 * part.dZeros);
+        part.nValue[DATAMETHOD_GRADIENT] = 100 + (200.0 * part.dGradient);
+        part.nValue[DATAMETHOD_TEXT_GRADIENT] = 100 + (200.0 * part.dText);
 
-        if (dZero == 1.0) {
-            part.nZero = 300;
+        if (part.dZeros == 1.0) {
+            part.nValue[DATAMETHOD_ZEROS] = 300;
         } else {
-            part.nZero = 100;
+            part.nValue[DATAMETHOD_ZEROS] = 100;
         }
 
-        if (dText == 1.0) {
-            part.nText = 300;
+        if (part.dText == 1.0) {
+            part.nValue[DATAMETHOD_TEXT] = 300;
         } else {
-            part.nText = 100;
+            part.nValue[DATAMETHOD_TEXT] = 100;
         }
 
         g_pData->listParts.append(part);
