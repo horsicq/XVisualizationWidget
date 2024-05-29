@@ -2,6 +2,7 @@ INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
 HEADERS += \
+    $$PWD/dialogvisualization.h \
     $$PWD/dialogvisualizationprocess.h \
     $$PWD/xfilearrow.h \
     $$PWD/xfiledescription.h \
@@ -11,6 +12,7 @@ HEADERS += \
     $$PWD/xvisualizationwidget.h
 
 SOURCES += \
+    $$PWD/dialogvisualization.cpp \
     $$PWD/dialogvisualizationprocess.cpp \
     $$PWD/xfilearrow.cpp \
     $$PWD/xfiledescription.cpp \
@@ -20,6 +22,7 @@ SOURCES += \
     $$PWD/xvisualizationwidget.cpp
 
 FORMS += \
+    $$PWD/dialogvisualization.ui \
     $$PWD/xvisualizationwidget.ui
 
 DISTFILES += \

@@ -1,6 +1,9 @@
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 set(XVISUALIZATIONWIDGET_SOURCES
+    ${CMAKE_CURRENT_LIST_DIR}/dialogvisualization.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dialogvisualization.h
+    ${CMAKE_CURRENT_LIST_DIR}/dialogvisualization.ui
     ${CMAKE_CURRENT_LIST_DIR}/dialogvisualizationprocess.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dialogvisualizationprocess.h
     ${CMAKE_CURRENT_LIST_DIR}/xfilearrow.cpp
@@ -11,9 +14,9 @@ set(XVISUALIZATIONWIDGET_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/xfileimage.h
     ${CMAKE_CURRENT_LIST_DIR}/xvisualization.cpp
     ${CMAKE_CURRENT_LIST_DIR}/xvisualization.h
+    ${CMAKE_CURRENT_LIST_DIR}/xvisualizationimage.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/xvisualizationimage.h
     ${CMAKE_CURRENT_LIST_DIR}/xvisualizationwidget.cpp
     ${CMAKE_CURRENT_LIST_DIR}/xvisualizationwidget.h
     ${CMAKE_CURRENT_LIST_DIR}/xvisualizationwidget.ui
-    ${CMAKE_CURRENT_LIST_DIR}/xvisualizationimage.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/xvisualizationimage.h
     )
