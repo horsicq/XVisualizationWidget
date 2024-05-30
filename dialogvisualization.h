@@ -27,8 +27,7 @@ namespace Ui {
 class DialogVisualization;
 }
 
-class DialogVisualization : public QDialog
-{
+class DialogVisualization : public QDialog {
     Q_OBJECT
 
 public:
@@ -39,4 +38,4 @@ private:
     Ui::DialogVisualization *ui;
 };
 
-#endif // DIALOGVISUALIZATION_H
+#endif  // DIALOGVISUALIZATION_H

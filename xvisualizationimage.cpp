@@ -79,7 +79,7 @@ void XVisualizationImage::paintEvent(QPaintEvent *pEvent)
         qint32 nHeight = height();
 
         double dRectWidth = (double)nWidth / (double)g_data.nWidth;
-        double dRectHeight = (double)nHeight /(double) g_data.nHeight;
+        double dRectHeight = (double)nHeight / (double)g_data.nHeight;
         double dX = (double)(g_nX * nWidth) / (double)g_data.nWidth;
         double dY = (double)(g_nY * nHeight) / (double)g_data.nHeight;
 
@@ -97,7 +97,7 @@ void XVisualizationImage::paintEvent(QPaintEvent *pEvent)
 }
 
 void XVisualizationImage::mousePressEvent(QMouseEvent *pEvent)
-{ 
+{
     qint32 nX = pEvent->x();
     qint32 nY = pEvent->y();
 

@@ -21,9 +21,7 @@
 #include "dialogvisualization.h"
 #include "ui_dialogvisualization.h"
 
-DialogVisualization::DialogVisualization(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::DialogVisualization)
+DialogVisualization::DialogVisualization(QWidget *parent) : QDialog(parent), ui(new Ui::DialogVisualization)
 {
     ui->setupUi(this);
 
