@@ -57,7 +57,7 @@ void XVisualizationImage::adjust()
         nOffset = g_data.listParts.at(nIndex).nOffset;
     }
 
-    qDebug("Offset: %x = %d", nOffset, (qint32)nOffset);
+    // qDebug("Offset: %x = %d", nOffset, (qint32)nOffset);
 }
 
 void XVisualizationImage::_clear()

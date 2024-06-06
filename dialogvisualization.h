@@ -31,7 +31,7 @@ class DialogVisualization : public QDialog {
     Q_OBJECT
 
 public:
-    explicit DialogVisualization(QWidget *parent = nullptr);
+    explicit DialogVisualization(QWidget *pParent = nullptr);
     ~DialogVisualization();
 
 private:
