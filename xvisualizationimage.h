@@ -28,6 +28,7 @@
 
 class XVisualizationImage : public QWidget {
     Q_OBJECT
+
 public:
     explicit XVisualizationImage(QWidget *pParent = nullptr);
 
@@ -44,11 +45,15 @@ protected:
     virtual void mousePressEvent(QMouseEvent *pEvent) override;
     virtual void resizeEvent(QResizeEvent *pEvent) override;
 
+signals:
+    void currentLocationChanged(quint64 nLocation, qint32 nLocationType, qint64 nSize);
+
 private:
     XVisualization::DATA g_data;
     QPixmap g_pixmap;
     qint32 g_nY;
     qint32 g_nX;
+    qint32 g_nCurrentIndex;
 };
 
 #endif  // XVISUALIZATIONIMAGE_H

@@ -59,6 +59,9 @@ private slots:
     void on_comboBoxType_currentIndexChanged(int nIndex);
     void on_comboBoxMapMode_currentIndexChanged(int nIndex);
 
+signals:
+    void currentLocationChanged(quint64 nLocation, qint32 nLocationType, qint64 nSize);
+
 private:
     Ui::XVisualizationWidget *ui;
     QIODevice *g_pDevice;

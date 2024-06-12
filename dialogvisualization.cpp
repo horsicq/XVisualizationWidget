@@ -21,14 +21,21 @@
 #include "dialogvisualization.h"
 #include "ui_dialogvisualization.h"
 
-DialogVisualization::DialogVisualization(QWidget *pParent) : QDialog(pParent), ui(new Ui::DialogVisualization)
+DialogVisualization::DialogVisualization(QWidget *pParent) : XShortcutsDialog(pParent), ui(new Ui::DialogVisualization)
 {
     ui->setupUi(this);
 
     setWindowFlags(Qt::Window);
+
+    connect(ui->widget, SIGNAL(currentLocationChanged(quint64, qint32, qint64)), this, SIGNAL(currentLocationChanged(quint64, qint32, qint64)));
 }
 
 DialogVisualization::~DialogVisualization()
 {
     delete ui;
+}
+
+void DialogVisualization::setData(QIODevice *pDevice, XBinary::FT fileType, bool bAuto)
+{
+    ui->widget->setData(pDevice, fileType, bAuto);
 }

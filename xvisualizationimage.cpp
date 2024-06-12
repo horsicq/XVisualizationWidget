@@ -64,6 +64,7 @@ void XVisualizationImage::_clear()
 {
     g_nY = 0;
     g_nX = 0;
+    g_nCurrentIndex = 0;
     g_data = {};
     g_pixmap = QPixmap();
 }
@@ -103,6 +104,12 @@ void XVisualizationImage::mousePressEvent(QMouseEvent *pEvent)
 
     g_nY = (nY * g_data.nHeight) / height();
     g_nX = (nX * g_data.nWidth) / width();
+
+    g_nCurrentIndex = (g_nY * g_data.nWidth) + g_nX;
+
+    if (g_nCurrentIndex < g_data.listParts.count()) {
+        emit currentLocationChanged(g_data.listParts.at(g_nCurrentIndex).nOffset, XBinary::LT_OFFSET, g_data.nFileBlockSize);
+    }
 
     adjust();
     update();

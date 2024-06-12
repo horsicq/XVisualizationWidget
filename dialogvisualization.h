@@ -21,18 +21,24 @@
 #ifndef DIALOGVISUALIZATION_H
 #define DIALOGVISUALIZATION_H
 
-#include <QDialog>
+#include "xvisualizationwidget.h"
+#include "xshortcutsdialog.h"
 
 namespace Ui {
 class DialogVisualization;
 }
 
-class DialogVisualization : public QDialog {
+class DialogVisualization : public XShortcutsDialog {
     Q_OBJECT
 
 public:
     explicit DialogVisualization(QWidget *pParent = nullptr);
     ~DialogVisualization();
+
+    void setData(QIODevice *pDevice, XBinary::FT fileType, bool bAuto = false);
+
+signals:
+    void currentLocationChanged(quint64 nLocation, qint32 nLocationType, qint64 nSize);
 
 private:
     Ui::DialogVisualization *ui;

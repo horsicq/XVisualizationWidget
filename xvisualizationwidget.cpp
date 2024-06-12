@@ -25,6 +25,8 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : QWidget(pParent),
 {
     ui->setupUi(this);
 
+    connect(ui->widgetImage, SIGNAL(currentLocationChanged(quint64, qint32, qint64)), this, SIGNAL(currentLocationChanged(quint64, qint32, qint64)));
+
     g_pDevice = nullptr;
     g_pScene = new QGraphicsScene(this);
 
