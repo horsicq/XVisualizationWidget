@@ -23,6 +23,10 @@
 XVisualizationImage::XVisualizationImage(QWidget *pParent) : QWidget(pParent)
 {
     _clear();
+
+    setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customContextMenu(QPoint)));
 }
 
 void XVisualizationImage::setData(XVisualization::DATA *pData)
@@ -67,6 +71,11 @@ void XVisualizationImage::_clear()
     g_nCurrentIndex = 0;
     g_data = {};
     g_pixmap = QPixmap();
+}
+
+void XVisualizationImage::customContextMenu(const QPoint &pos)
+{
+    qDebug("customContextMenu");
 }
 
 void XVisualizationImage::paintEvent(QPaintEvent *pEvent)

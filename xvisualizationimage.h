@@ -40,6 +40,9 @@ private:
     void adjust();
     void _clear();
 
+private slots:
+    void customContextMenu(const QPoint &pos);
+
 protected:
     virtual void paintEvent(QPaintEvent *pEvent) override;
     virtual void mousePressEvent(QMouseEvent *pEvent) override;
