@@ -21,7 +21,7 @@
 #include "xvisualizationwidget.h"
 #include "ui_xvisualizationwidget.h"
 
-XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : QWidget(pParent), ui(new Ui::XVisualizationWidget)
+XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : XShortcutsWidget(pParent), ui(new Ui::XVisualizationWidget)
 {
     ui->setupUi(this);
 
@@ -263,6 +263,11 @@ void XVisualizationWidget::reloadImage()
     }
 }
 
+void XVisualizationWidget::adjustView()
+{
+    // TODO
+}
+
 void XVisualizationWidget::on_horizontalSliderZoom_valueChanged(int nValue)
 {
     setupMatrix(nValue);
@@ -278,7 +283,7 @@ void XVisualizationWidget::setupMatrix(qint32 nValue)
     ui->graphicsViewResult->setTransform(matrix);
 }
 
-void XVisualizationWidget::on_pushButtonVisualizationSave_clicked()
+void XVisualizationWidget::on_toolButtonVisualizationSave_clicked()
 {
     QString sFilter = XOptions::getImageFilter();
     QString sFileName = XBinary::getResultFileName(g_pDevice, QString("%1.png").arg(tr("Visualization")));
@@ -327,7 +332,7 @@ void XVisualizationWidget::on_listWidgetHighlights_itemChanged(QListWidgetItem *
     reloadImage();
 }
 
-void XVisualizationWidget::on_pushButtonVisualizationReload_clicked()
+void XVisualizationWidget::on_toolButtonVisualizationReload_clicked()
 {
     reload();
 }
@@ -352,4 +357,9 @@ void XVisualizationWidget::on_comboBoxMapMode_currentIndexChanged(int nIndex)
 {
     Q_UNUSED(nIndex)
     reload();
+}
+
+void XVisualizationWidget::registerShortcuts(bool bState)
+{
+    Q_UNUSED(bState)
 }

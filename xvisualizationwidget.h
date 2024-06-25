@@ -21,10 +21,10 @@
 #ifndef XVISUALIZATIONWIDGET_H
 #define XVISUALIZATIONWIDGET_H
 
-#include <QWidget>
 #include <QGraphicsScene>
 #include <QListWidgetItem>
 #include <QtMath>
+#include "xshortcutswidget.h"
 #include "xformats.h"
 #include "xfileimage.h"
 #include "xfiledescription.h"
@@ -34,7 +34,7 @@ namespace Ui {
 class XVisualizationWidget;
 }
 
-class XVisualizationWidget : public QWidget {
+class XVisualizationWidget : public XShortcutsWidget {
     Q_OBJECT
 
 public:
@@ -44,20 +44,24 @@ public:
     void setData(QIODevice *pDevice, XBinary::FT fileType, bool bAuto = false);
     void reload();
     void reloadImage();
+    virtual void adjustView();
 
 private slots:
     void on_horizontalSliderZoom_valueChanged(int nValue);
     void setupMatrix(qint32 nValue);
-    void on_pushButtonVisualizationSave_clicked();
+    void on_toolButtonVisualizationSave_clicked();
     void on_listWidgetRegions_itemSelectionChanged();
     void on_listWidgetHighlights_itemSelectionChanged();
     void on_comboBoxMethod_currentIndexChanged(int nIndex);
     void on_listWidgetRegions_itemChanged(QListWidgetItem *pItem);
     void on_listWidgetHighlights_itemChanged(QListWidgetItem *pItem);
-    void on_pushButtonVisualizationReload_clicked();
+    void on_toolButtonVisualizationReload_clicked();
     void on_spinBoxBlockSize_valueChanged(int nValue);
     void on_comboBoxType_currentIndexChanged(int nIndex);
     void on_comboBoxMapMode_currentIndexChanged(int nIndex);
+
+protected:
+    virtual void registerShortcuts(bool bState);
 
 signals:
     void currentLocationChanged(quint64 nLocation, qint32 nLocationType, qint64 nSize);

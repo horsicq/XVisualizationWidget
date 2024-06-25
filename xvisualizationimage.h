@@ -25,8 +25,9 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include "xvisualization.h"
+#include "xshortcutswidget.h"
 
-class XVisualizationImage : public QWidget {
+class XVisualizationImage : public XShortcutsWidget {
     Q_OBJECT
 
 public:
@@ -35,6 +36,7 @@ public:
     void setData(XVisualization::DATA *pData);
     void clear();
     QPixmap getPixmap();
+    virtual void adjustView();
 
 private:
     void adjust();
@@ -50,6 +52,9 @@ protected:
 
 signals:
     void currentLocationChanged(quint64 nLocation, qint32 nLocationType, qint64 nSize);
+
+protected:
+    virtual void registerShortcuts(bool bState);
 
 private:
     XVisualization::DATA g_data;

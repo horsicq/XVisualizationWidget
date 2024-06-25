@@ -20,7 +20,7 @@
  */
 #include "xvisualizationimage.h"
 
-XVisualizationImage::XVisualizationImage(QWidget *pParent) : QWidget(pParent)
+XVisualizationImage::XVisualizationImage(QWidget *pParent) : XShortcutsWidget(pParent)
 {
     _clear();
 
@@ -49,6 +49,11 @@ void XVisualizationImage::clear()
 QPixmap XVisualizationImage::getPixmap()
 {
     return g_pixmap;
+}
+
+void XVisualizationImage::adjustView()
+{
+    // TODO
 }
 
 void XVisualizationImage::adjust()
@@ -128,4 +133,9 @@ void XVisualizationImage::resizeEvent(QResizeEvent *pEvent)
 {
     adjust();
     QWidget::resizeEvent(pEvent);
+}
+
+void XVisualizationImage::registerShortcuts(bool bState)
+{
+    Q_UNUSED(bState)
 }
