@@ -25,8 +25,6 @@ DialogVisualization::DialogVisualization(QWidget *pParent) : XShortcutsDialog(pP
 {
     ui->setupUi(this);
 
-    setWindowFlags(Qt::Window);
-
     connect(ui->widget, SIGNAL(currentLocationChanged(quint64, qint32, qint64)), this, SIGNAL(currentLocationChanged(quint64, qint32, qint64)));
 }
 
