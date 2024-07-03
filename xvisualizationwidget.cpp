@@ -102,7 +102,7 @@ void XVisualizationWidget::reload()
 
         if (g_pDevice) {
             DialogVisualizationProcess dvp(XOptions::getMainWidget(this));
-
+            dvp.setGlobal(getShortcuts(), getGlobalOptions());
             dvp.setData(g_pDevice, &g_data);
 
             dvp.showDialogDelay();
