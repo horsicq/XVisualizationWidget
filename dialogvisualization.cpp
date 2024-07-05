@@ -21,7 +21,7 @@
 #include "dialogvisualization.h"
 #include "ui_dialogvisualization.h"
 
-DialogVisualization::DialogVisualization(QWidget *pParent) : XShortcutsDialog(pParent), ui(new Ui::DialogVisualization)
+DialogVisualization::DialogVisualization(QWidget *pParent) : XShortcutsDialog(pParent, true), ui(new Ui::DialogVisualization)
 {
     ui->setupUi(this);
 
