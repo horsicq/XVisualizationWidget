@@ -37,3 +37,8 @@ void DialogVisualization::setData(QIODevice *pDevice, XBinary::FT fileType, bool
 {
     ui->widget->setData(pDevice, fileType, bAuto);
 }
+
+void DialogVisualization::adjustView()
+{
+
+}

@@ -36,9 +36,7 @@ public:
     ~DialogVisualization();
 
     void setData(QIODevice *pDevice, XBinary::FT fileType, bool bAuto = false);
-    virtual void adjustView()
-    {
-    }
+    virtual void adjustView();
 
 signals:
     void currentLocationChanged(quint64 nLocation, qint32 nLocationType, qint64 nSize);
