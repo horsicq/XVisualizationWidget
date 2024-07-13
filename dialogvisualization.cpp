@@ -40,5 +40,4 @@ void DialogVisualization::setData(QIODevice *pDevice, XBinary::FT fileType, bool
 
 void DialogVisualization::adjustView()
 {
-
 }
