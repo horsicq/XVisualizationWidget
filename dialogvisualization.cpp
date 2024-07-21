@@ -41,3 +41,8 @@ void DialogVisualization::setData(QIODevice *pDevice, XBinary::FT fileType, bool
 void DialogVisualization::adjustView()
 {
 }
+
+void DialogVisualization::registerShortcuts(bool bState)
+{
+    Q_UNUSED(bState)
+}

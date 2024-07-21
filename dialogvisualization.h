@@ -42,10 +42,7 @@ signals:
     void currentLocationChanged(quint64 nLocation, qint32 nLocationType, qint64 nSize);
 
 protected:
-    virtual void registerShortcuts(bool bState)
-    {
-        Q_UNUSED(bState)
-    }
+    virtual void registerShortcuts(bool bState);
 
 private:
     Ui::DialogVisualization *ui;
