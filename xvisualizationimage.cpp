@@ -58,13 +58,13 @@ void XVisualizationImage::adjustView()
 
 void XVisualizationImage::adjust()
 {
-    qint32 nIndex = ((g_data.nWidth * g_nY) + g_nX);
+    // qint32 nIndex = ((g_data.nWidth * g_nY) + g_nX);
 
-    qint64 nOffset = 0;
+    // qint64 nOffset = 0;
 
-    if (nIndex < g_data.nWidth * g_data.nHeight) {
-        nOffset = g_data.listParts.at(nIndex).nOffset;
-    }
+    // if (nIndex < g_data.nWidth * g_data.nHeight) {
+    //     nOffset = g_data.listParts.at(nIndex).nOffset;
+    // }
 
     // qDebug("Offset: %x = %d", nOffset, (qint32)nOffset);
 }
