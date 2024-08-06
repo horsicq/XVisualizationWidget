@@ -80,7 +80,8 @@ void XVisualizationImage::_clear()
 
 void XVisualizationImage::customContextMenu(const QPoint &pos)
 {
-    qDebug("customContextMenu");
+    Q_UNUSED(pos)
+    // qDebug("customContextMenu");
 }
 
 void XVisualizationImage::paintEvent(QPaintEvent *pEvent)
