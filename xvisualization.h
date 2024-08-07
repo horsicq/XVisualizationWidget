@@ -68,6 +68,7 @@ public:
         QColor colorBase;
         XBinary::FT fileFormat;
         XBinary::MAPMODE mapMode;
+        quint64 nMethodsFlags;
         DATAMETHOD dataMethod;
         QList<PART> listParts;
         QList<XAREA> listRegions;
@@ -80,6 +81,10 @@ public:
     static XAREA isRegionPresent(DATA *pData, qint64 nBlockIndex);
     static XAREA isHighlightPresent(DATA *pData, qint64 nBlockIndex);
     void setData(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT *pPdStruct);
+    static QMap<quint64, QString> getMethodFlags();
+    static quint64 getDefaultMethodFlag();
+    static QString methodToString(DATAMETHOD dataMethod);
+    static QList<DATAMETHOD> getMethodsListFromFlags(quint64 nMethodFlags);
 
 signals:
     void errorMessage(const QString &sText);

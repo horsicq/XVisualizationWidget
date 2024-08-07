@@ -149,6 +149,16 @@
       </widget>
      </item>
      <item>
+      <widget class="XComboBoxEx" name="comboBoxMethods">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QToolButton" name="toolButtonVisualizationReload">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -277,7 +287,7 @@
           </layout>
          </widget>
         </widget>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -426,6 +436,11 @@
    <extends>QWidget</extends>
    <header>xvisualizationimage.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>XComboBoxEx</class>
+   <extends>QComboBox</extends>
+   <header>xcomboboxex.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

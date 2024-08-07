@@ -39,15 +39,9 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : XShortcutsWidget(
     ui->splitterVisualization->setStretchFactor(0, 1);
     ui->splitterVisualization->setStretchFactor(1, 0);
 
-    ui->comboBoxMethod->addItem("", XVisualization::DATAMETHOD_NONE);
-    ui->comboBoxMethod->addItem(tr("Entropy"), XVisualization::DATAMETHOD_ENTROPY);
-    ui->comboBoxMethod->addItem(tr("Gradient"), XVisualization::DATAMETHOD_GRADIENT);
-    ui->comboBoxMethod->addItem(tr("Zeros"), XVisualization::DATAMETHOD_ZEROS);
-    ui->comboBoxMethod->addItem(QString("%1(%2)").arg(tr("Zeros"), tr("Gradient")), XVisualization::DATAMETHOD_ZEROS_GRADIENT);
-    ui->comboBoxMethod->addItem(tr("Text"), XVisualization::DATAMETHOD_TEXT);
-    ui->comboBoxMethod->addItem(QString("%1(%2)").arg(tr("Text"), tr("Gradient")), XVisualization::DATAMETHOD_TEXT_GRADIENT);
-
-    ui->comboBoxMethod->setCurrentIndex(1);  // Set Entropy as default
+    ui->comboBoxMethods->setData(XVisualization::getMethodFlags(), XComboBoxEx::CBTYPE_FLAGS, 0, tr("Methods"));
+    ui->comboBoxMethods->setValue(XVisualization::getDefaultMethodFlag());
+    ui->comboBoxMethods->setItemEnabled(1, false);
 
     ui->spinBoxBlockSize->setValue(3);
 }
@@ -89,6 +83,7 @@ void XVisualizationWidget::reload()
 {
     const bool bBlocked1 = ui->listWidgetRegions->blockSignals(true);
     const bool bBlocked2 = ui->listWidgetHighlights->blockSignals(true);
+    const bool bBlocked3 = ui->comboBoxMethod->blockSignals(true);
 
     // TODO
     // Get XBinary:: regions, highlights, resolution
@@ -99,6 +94,7 @@ void XVisualizationWidget::reload()
         g_data.nHeight = ui->spinBoxHeight->value();
         g_data.fileFormat = (XBinary::FT)(ui->comboBoxType->currentData().toInt());
         g_data.mapMode = (XBinary::MAPMODE)(ui->comboBoxMapMode->currentData().toInt());
+        g_data.nMethodsFlags = ui->comboBoxMethods->getValue().toULongLong();
 
         if (g_pDevice) {
             DialogVisualizationProcess dvp(XOptions::getMainWidget(this));
@@ -143,12 +139,28 @@ void XVisualizationWidget::reload()
         bReloadImage = true;
     }
 
+    ui->comboBoxMethod->clear();
+
+    QList<XVisualization::DATAMETHOD> listMethods = XVisualization::getMethodsListFromFlags(g_data.nMethodsFlags);
+
+    qint32 nNumberOfMethods = listMethods.count();
+
+    for(int i = 0; i < nNumberOfMethods; i++)
+    {
+        ui->comboBoxMethod->addItem(XVisualization::methodToString(listMethods.at(i)), listMethods.at(i));
+    }
+
+    if (nNumberOfMethods > 1) {
+        ui->comboBoxMethod->setCurrentIndex(1);
+    }
+
     if (bReloadImage) {
         reloadImage();
     }
 
     ui->listWidgetRegions->blockSignals(bBlocked1);
     ui->listWidgetHighlights->blockSignals(bBlocked2);
+    ui->comboBoxMethod->blockSignals(bBlocked3);
 }
 
 void XVisualizationWidget::reloadImage()
@@ -195,7 +207,7 @@ void XVisualizationWidget::reloadImage()
 
             for (qint32 i = 0; i < nNumberOfRecords; i++) {
                 if (g_data.listRegions.at(i).bIsEnabled) {
-                    QGraphicsTextItem *pItemRegion = new XFileDescription(g_data.listRegions.at(i).color, g_data.listRegions.at(i).sName);
+                    QGraphicsTextItem *pItemRegion = new XFileDescription(g_pScene, g_data.listRegions.at(i).color, g_data.listRegions.at(i).sName);
                     pItemRegion->setPos(QPointF(0, rPosition));
 
                     rRegionsSize = qMax(pItemRegion->boundingRect().width(), rRegionsSize);
@@ -222,7 +234,7 @@ void XVisualizationWidget::reloadImage()
 
             for (qint32 i = 0; i < nNumberOfRecords; i++) {
                 if (g_data.listHighlights.at(i).bIsEnabled) {
-                    QGraphicsTextItem *pItemHighlight = new XFileDescription(g_data.listHighlights.at(i).color, g_data.listHighlights.at(i).sName);
+                    QGraphicsTextItem *pItemHighlight = new XFileDescription(g_pScene, g_data.listHighlights.at(i).color, g_data.listHighlights.at(i).sName);
                     pItemHighlight->setPos(QPointF(rRegionsSize + pItemMain->boundingRect().width() + 2 * rDelta, rPosition));
 
                     rHighlightsSize = qMax(pItemHighlight->boundingRect().width(), rHighlightsSize);
@@ -265,7 +277,17 @@ void XVisualizationWidget::reloadImage()
 
 void XVisualizationWidget::adjustView()
 {
-    // TODO
+    getGlobalOptions()->adjustWidget(this, XOptions::ID_VIEW_FONT_CONTROLS);
+    getGlobalOptions()->adjustWidget(ui->graphicsViewResult, XOptions::ID_VIEW_FONT_CONTROLS);
+
+    {
+        QString sFont = getGlobalOptions()->getValue(XOptions::ID_VIEW_FONT_CONTROLS).toString();
+
+        QFont _font;
+        if ((sFont != "") && _font.fromString(sFont)) {
+            g_pScene->setFont(_font);
+        }
+    }
 }
 
 void XVisualizationWidget::on_horizontalSliderZoom_valueChanged(int nValue)

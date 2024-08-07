@@ -26,11 +26,12 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsScene>
 #include "xvisualization.h"
 
 class XFileDescription : public QGraphicsTextItem {
 public:
-    XFileDescription(const QColor color, const QString &sText);
+    XFileDescription(QGraphicsScene *pScene, const QColor color, const QString &sText);
 
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
@@ -42,6 +43,7 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
+    QGraphicsScene *g_pScene;
     QColor g_color;
     QString g_sText;
 };

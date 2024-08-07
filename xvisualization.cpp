@@ -121,6 +121,64 @@ void XVisualization::setData(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT 
     g_pPdStruct = pPdStruct;
 }
 
+QMap<quint64, QString> XVisualization::getMethodFlags()
+{
+    QMap<quint64, QString> mapResult;
+
+    mapResult.insert(1 << XVisualization::DATAMETHOD_NONE, methodToString(XVisualization::DATAMETHOD_NONE));
+    mapResult.insert(1 << XVisualization::DATAMETHOD_ENTROPY, methodToString(XVisualization::DATAMETHOD_ENTROPY));
+    mapResult.insert(1 << XVisualization::DATAMETHOD_GRADIENT, methodToString(XVisualization::DATAMETHOD_GRADIENT));
+    mapResult.insert(1 << XVisualization::DATAMETHOD_ZEROS, methodToString(XVisualization::DATAMETHOD_ZEROS));
+    mapResult.insert(1 << XVisualization::DATAMETHOD_ZEROS_GRADIENT, methodToString(XVisualization::DATAMETHOD_ZEROS_GRADIENT));
+    mapResult.insert(1 << XVisualization::DATAMETHOD_TEXT, methodToString(XVisualization::DATAMETHOD_TEXT));
+    mapResult.insert(1 << XVisualization::DATAMETHOD_TEXT_GRADIENT, methodToString(XVisualization::DATAMETHOD_TEXT_GRADIENT));
+
+    return mapResult;
+}
+
+quint64 XVisualization::getDefaultMethodFlag()
+{
+    quint64 nResult = 0;
+
+    nResult |= (1 << XVisualization::DATAMETHOD_NONE);
+    nResult |= (1 << XVisualization::DATAMETHOD_ENTROPY);
+    nResult |= (1 << XVisualization::DATAMETHOD_ZEROS);
+    nResult |= (1 << XVisualization::DATAMETHOD_ZEROS_GRADIENT);
+
+    return nResult;
+}
+
+QString XVisualization::methodToString(DATAMETHOD dataMethod)
+{
+    QString sResult;
+
+    switch (dataMethod) {
+        case DATAMETHOD_NONE: sResult = tr("None"); break;
+        case DATAMETHOD_ENTROPY: sResult = tr("Entropy"); break;
+        case DATAMETHOD_GRADIENT: sResult = tr("Gradient"); break;
+        case DATAMETHOD_ZEROS: sResult = tr("Zeros"); break;
+        case DATAMETHOD_ZEROS_GRADIENT: sResult = QString("%1(%2)").arg(tr("Zeros"), tr("Gradient")); break;
+        case DATAMETHOD_TEXT: sResult = tr("Text"); break;
+        case DATAMETHOD_TEXT_GRADIENT: sResult = QString("%1(%2)").arg(tr("Text"), tr("Gradient")); break;
+        default: sResult = tr("Unknown");
+    }
+
+    return sResult;
+}
+
+QList<XVisualization::DATAMETHOD> XVisualization::getMethodsListFromFlags(quint64 nMethodFlags)
+{
+    QList<DATAMETHOD> listResult;
+
+    for (qint32 i = 0; i < __SIZE_DATAMETHOD; i++) {
+        if (nMethodFlags & (1 << i)) {
+            listResult.append((DATAMETHOD)i);
+        }
+    }
+
+    return listResult;
+}
+
 void XVisualization::handleData()
 {
     QElapsedTimer scanTimer;
@@ -139,32 +197,50 @@ void XVisualization::handleData()
     double dFileBlockSize = (double)nFileSize / (nNumberOfBlocks);
     g_pData->nFileBlockSize = dFileBlockSize;
 
+    bool bEntropy = g_pData->nMethodsFlags & (1 << DATAMETHOD_ENTROPY);
+    bool bGradient = g_pData->nMethodsFlags & (1 << DATAMETHOD_GRADIENT);
+    bool bZeros = g_pData->nMethodsFlags & (1 << DATAMETHOD_ZEROS);
+    bool bZerosGradient = g_pData->nMethodsFlags & (1 << DATAMETHOD_ZEROS_GRADIENT);
+    bool bText = g_pData->nMethodsFlags & (1 << DATAMETHOD_TEXT);
+    bool bTextGradient = g_pData->nMethodsFlags & (1 << DATAMETHOD_TEXT_GRADIENT);
+
     XBinary::setPdStructInit(g_pPdStruct, _nFreeIndex, nNumberOfBlocks);
 
     for (qint32 i = 0; (i < nNumberOfBlocks) && (!(g_pPdStruct->bIsStop)); i++) {
         PART part = {};
         part.nOffset = i * dFileBlockSize;
         part.nValue[DATAMETHOD_NONE] = 100;
-        part.dEntropy = binary.getBinaryStatus(XBinary::BSTATUS_ENTROPY, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
-        part.dZeros = binary.getBinaryStatus(XBinary::BSTATUS_ZEROS, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
-        part.dGradient = binary.getBinaryStatus(XBinary::BSTATUS_GRADIENT, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
-        part.dText = binary.getBinaryStatus(XBinary::BSTATUS_TEXT, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
 
-        part.nValue[DATAMETHOD_ENTROPY] = 100 + (200.0 * part.dEntropy) / 8.0;
-        part.nValue[DATAMETHOD_ZEROS_GRADIENT] = 100 + (200.0 * part.dZeros);
-        part.nValue[DATAMETHOD_GRADIENT] = 100 + (200.0 * part.dGradient);
-        part.nValue[DATAMETHOD_TEXT_GRADIENT] = 100 + (200.0 * part.dText);
-
-        if (part.dZeros == 1.0) {
-            part.nValue[DATAMETHOD_ZEROS] = 300;
-        } else {
-            part.nValue[DATAMETHOD_ZEROS] = 100;
+        if (bEntropy) {
+            part.dEntropy = binary.getBinaryStatus(XBinary::BSTATUS_ENTROPY, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
+            part.nValue[DATAMETHOD_ENTROPY] = 100 + (200.0 * part.dEntropy) / 8.0;
         }
 
-        if (part.dText == 1.0) {
-            part.nValue[DATAMETHOD_TEXT] = 300;
-        } else {
-            part.nValue[DATAMETHOD_TEXT] = 100;
+        if (bGradient) {
+            part.dGradient = binary.getBinaryStatus(XBinary::BSTATUS_GRADIENT, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
+            part.nValue[DATAMETHOD_GRADIENT] = 100 + (200.0 * part.dGradient);
+        }
+
+        if (bZeros || bZerosGradient) {
+            part.dZeros = binary.getBinaryStatus(XBinary::BSTATUS_ZEROS, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
+            part.nValue[DATAMETHOD_ZEROS_GRADIENT] = 100 + (200.0 * part.dZeros);
+
+            if (part.dZeros == 1.0) {
+                part.nValue[DATAMETHOD_ZEROS] = 300;
+            } else {
+                part.nValue[DATAMETHOD_ZEROS] = 100;
+            }
+        }
+
+        if (bText || bTextGradient) {
+            part.dText = binary.getBinaryStatus(XBinary::BSTATUS_TEXT, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
+            part.nValue[DATAMETHOD_TEXT_GRADIENT] = 100 + (200.0 * part.dText);
+
+            if (part.dText == 1.0) {
+                part.nValue[DATAMETHOD_TEXT] = 300;
+            } else {
+                part.nValue[DATAMETHOD_TEXT] = 100;
+            }
         }
 
         g_pData->listParts.append(part);

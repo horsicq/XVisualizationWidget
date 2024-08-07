@@ -20,10 +20,14 @@
  */
 #include "xfiledescription.h"
 
-XFileDescription::XFileDescription(const QColor color, const QString &sText)
+XFileDescription::XFileDescription(QGraphicsScene *pScene, const QColor color, const QString &sText)
 {
+    g_pScene = pScene;
     g_color = color;
     g_sText = sText;
+
+    QFont _font = pScene->font();
+    setFont(_font);
 
     setFlags(ItemIsSelectable | ItemIsMovable);
     setAcceptHoverEvents(true);
@@ -32,7 +36,9 @@ XFileDescription::XFileDescription(const QColor color, const QString &sText)
 QRectF XFileDescription::boundingRect() const
 {
     QRect result;
-    QSize _size = QFontMetrics(font()).size(Qt::TextSingleLine, g_sText);
+
+    QFont _font = font();
+    QSize _size = QFontMetrics(_font).size(Qt::TextSingleLine, g_sText);
 
     qint32 nHeight = _size.height();
     qint32 nWidth = nHeight * 2 + _size.width();
