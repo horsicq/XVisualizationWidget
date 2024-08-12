@@ -145,7 +145,7 @@ void XVisualizationWidget::reload()
 
     qint32 nNumberOfMethods = listMethods.count();
 
-    for (int i = 0; i < nNumberOfMethods; i++) {
+    for (qint32 i = 0; i < nNumberOfMethods; i++) {
         ui->comboBoxMethod->addItem(XVisualization::methodToString(listMethods.at(i)), listMethods.at(i));
     }
 

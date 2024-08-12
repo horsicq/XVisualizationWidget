@@ -171,7 +171,7 @@ QList<XVisualization::DATAMETHOD> XVisualization::getMethodsListFromFlags(quint6
     QList<DATAMETHOD> listResult;
 
     for (qint32 i = 0; i < __SIZE_DATAMETHOD; i++) {
-        if (nMethodFlags & (1 << i)) {
+        if (nMethodFlags & ((quint64)1 << i)) {
             listResult.append((DATAMETHOD)i);
         }
     }
