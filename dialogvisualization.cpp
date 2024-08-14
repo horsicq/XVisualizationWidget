@@ -38,6 +38,12 @@ void DialogVisualization::setData(QIODevice *pDevice, XBinary::FT fileType, bool
     ui->widget->setData(pDevice, fileType, bAuto);
 }
 
+void DialogVisualization::setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions)
+{
+    ui->widget->setGlobal(pShortcuts, pXOptions);
+    XShortcutsDialog::setGlobal(pShortcuts, pXOptions);
+}
+
 void DialogVisualization::adjustView()
 {
 }
@@ -46,3 +52,9 @@ void DialogVisualization::registerShortcuts(bool bState)
 {
     Q_UNUSED(bState)
 }
+
+void DialogVisualization::on_pushButtonClose_clicked()
+{
+    this->close();
+}
+

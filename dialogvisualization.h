@@ -36,6 +36,7 @@ public:
     ~DialogVisualization();
 
     void setData(QIODevice *pDevice, XBinary::FT fileType, bool bAuto = false);
+    virtual void setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions);
     virtual void adjustView();
 
 signals:
@@ -43,6 +44,9 @@ signals:
 
 protected:
     virtual void registerShortcuts(bool bState);
+
+private slots:
+    void on_pushButtonClose_clicked();
 
 private:
     Ui::DialogVisualization *ui;

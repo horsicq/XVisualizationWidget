@@ -114,8 +114,8 @@ void XVisualizationImage::paintEvent(QPaintEvent *pEvent)
 
 void XVisualizationImage::mousePressEvent(QMouseEvent *pEvent)
 {
-    qint32 nX = pEvent->x();
-    qint32 nY = pEvent->y();
+    qint32 nX = pEvent->pos().x();
+    qint32 nY = pEvent->pos().y();
 
     g_nY = (nY * g_data.nHeight) / height();
     g_nX = (nX * g_data.nWidth) / width();

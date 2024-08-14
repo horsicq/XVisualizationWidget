@@ -36,6 +36,7 @@ public:
     void setData(XVisualization::DATA *pData);
     void clear();
     QPixmap getPixmap();
+
     virtual void adjustView();
 
 private:

@@ -44,6 +44,7 @@ public:
     void setData(QIODevice *pDevice, XBinary::FT fileType, bool bAuto = false);
     void reload();
     void reloadImage();
+    virtual void setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions);
     virtual void adjustView();
 
 private slots:

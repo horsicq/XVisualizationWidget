@@ -274,6 +274,12 @@ void XVisualizationWidget::reloadImage()
     }
 }
 
+void XVisualizationWidget::setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions)
+{
+    ui->widgetImage->setGlobal(pShortcuts, pXOptions);
+    XShortcutsWidget::setGlobal(pShortcuts, pXOptions);
+}
+
 void XVisualizationWidget::adjustView()
 {
     getGlobalOptions()->adjustWidget(this, XOptions::ID_VIEW_FONT_CONTROLS);
