@@ -57,4 +57,3 @@ void DialogVisualization::on_pushButtonClose_clicked()
 {
     this->close();
 }
-
