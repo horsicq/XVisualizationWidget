@@ -25,8 +25,8 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : XShortcutsWidget(
 {
     ui->setupUi(this);
 
-    XOptions::addToolButtonIcon(ui->toolButtonVisualizationReload, ":/icons/Refresh.16.16.png");
-    XOptions::addToolButtonIcon(ui->toolButtonVisualizationSave, ":/icons/Save.16.16.png");
+    XOptions::adjustToolButton(ui->toolButtonVisualizationReload, XOptions::ICONTYPE_RELOAD);
+    XOptions::adjustToolButton(ui->toolButtonVisualizationSave, XOptions::ICONTYPE_SAVE);
 
     ui->comboBoxType->setToolTip(tr("Type"));
     ui->comboBoxMapMode->setToolTip(tr("Mode"));
