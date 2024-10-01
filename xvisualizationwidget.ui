@@ -10,6 +10,12 @@
     <height>695</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>120</width>
+    <height>0</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -29,36 +35,65 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QGroupBox" name="groupBoxType">
+      <widget class="QComboBox" name="comboBoxType">
        <property name="minimumSize">
         <size>
-         <width>240</width>
+         <width>120</width>
          <height>0</height>
         </size>
        </property>
-       <property name="title">
-        <string>Type</string>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBoxMapMode">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <property name="leftMargin">
-         <number>2</number>
-        </property>
-        <property name="topMargin">
-         <number>2</number>
-        </property>
-        <property name="rightMargin">
-         <number>2</number>
-        </property>
-        <property name="bottomMargin">
-         <number>2</number>
-        </property>
-        <item>
-         <widget class="QComboBox" name="comboBoxType"/>
-        </item>
-        <item>
-         <widget class="QComboBox" name="comboBoxMapMode"/>
-        </item>
-       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spinBoxWidth">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="minimum">
+        <number>10</number>
+       </property>
+       <property name="maximum">
+        <number>1000</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spinBoxHeight">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="minimum">
+        <number>10</number>
+       </property>
+       <property name="maximum">
+        <number>1000</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="XComboBoxEx" name="comboBoxMethods">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>0</height>
+        </size>
+       </property>
       </widget>
      </item>
      <item>
@@ -75,86 +110,18 @@
       </spacer>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBoxWidth">
-       <property name="minimumSize">
-        <size>
-         <width>120</width>
-         <height>0</height>
-        </size>
+      <widget class="QToolButton" name="toolButtonVisualizationSave">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="title">
-        <string>Width</string>
+       <property name="text">
+        <string>Save</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_9">
-        <property name="leftMargin">
-         <number>2</number>
-        </property>
-        <property name="topMargin">
-         <number>2</number>
-        </property>
-        <property name="rightMargin">
-         <number>2</number>
-        </property>
-        <property name="bottomMargin">
-         <number>2</number>
-        </property>
-        <item>
-         <widget class="QSpinBox" name="spinBoxWidth">
-          <property name="minimum">
-           <number>10</number>
-          </property>
-          <property name="maximum">
-           <number>1000</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBoxHeight">
-       <property name="minimumSize">
-        <size>
-         <width>120</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="title">
-        <string>Height</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_10">
-        <property name="leftMargin">
-         <number>2</number>
-        </property>
-        <property name="topMargin">
-         <number>2</number>
-        </property>
-        <property name="rightMargin">
-         <number>2</number>
-        </property>
-        <property name="bottomMargin">
-         <number>2</number>
-        </property>
-        <item>
-         <widget class="QSpinBox" name="spinBoxHeight">
-          <property name="minimum">
-           <number>10</number>
-          </property>
-          <property name="maximum">
-           <number>1000</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="XComboBoxEx" name="comboBoxMethods">
-       <property name="minimumSize">
-        <size>
-         <width>150</width>
-         <height>0</height>
-        </size>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
        </property>
       </widget>
      </item>
@@ -169,18 +136,8 @@
        <property name="text">
         <string>Reload</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="toolButtonVisualizationSave">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Save</string>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
        </property>
       </widget>
      </item>
@@ -292,86 +249,38 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
-             <widget class="QGroupBox" name="groupBoxBlockSize">
+             <widget class="QSpinBox" name="spinBoxBlockSize">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>120</width>
                 <height>0</height>
                </size>
               </property>
-              <property name="title">
-               <string>Block size</string>
+              <property name="minimum">
+               <number>1</number>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_11">
-               <property name="leftMargin">
-                <number>2</number>
-               </property>
-               <property name="topMargin">
-                <number>2</number>
-               </property>
-               <property name="rightMargin">
-                <number>2</number>
-               </property>
-               <property name="bottomMargin">
-                <number>2</number>
-               </property>
-               <item>
-                <widget class="QSpinBox" name="spinBoxBlockSize">
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="maximum">
-                  <number>10</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+              <property name="maximum">
+               <number>10</number>
+              </property>
              </widget>
             </item>
             <item>
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+             <widget class="QComboBox" name="comboBoxMethod">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
+             </widget>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="QGroupBox" name="groupBoxMethod">
-            <property name="minimumSize">
-             <size>
-              <width>120</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="title">
-             <string>Method</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_7">
-             <property name="leftMargin">
-              <number>2</number>
-             </property>
-             <property name="topMargin">
-              <number>2</number>
-             </property>
-             <property name="rightMargin">
-              <number>2</number>
-             </property>
-             <property name="bottomMargin">
-              <number>2</number>
-             </property>
-             <item>
-              <widget class="QComboBox" name="comboBoxMethod"/>
-             </item>
-            </layout>
-           </widget>
           </item>
           <item>
            <widget class="QGroupBox" name="groupBoxRegions">
@@ -432,15 +341,15 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>XComboBoxEx</class>
+   <extends>QComboBox</extends>
+   <header>xcomboboxex.h</header>
+  </customwidget>
+  <customwidget>
    <class>XVisualizationImage</class>
    <extends>QWidget</extends>
    <header>xvisualizationimage.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>XComboBoxEx</class>
-   <extends>QComboBox</extends>
-   <header>xcomboboxex.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -25,6 +25,23 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : XShortcutsWidget(
 {
     ui->setupUi(this);
 
+    XOptions::addToolButtonIcon(ui->toolButtonVisualizationReload, ":/icons/Refresh.16.16.png");
+    XOptions::addToolButtonIcon(ui->toolButtonVisualizationSave, ":/icons/Save.16.16.png");
+
+    ui->comboBoxType->setToolTip(tr("Type"));
+    ui->comboBoxMapMode->setToolTip(tr("Mode"));
+    ui->comboBoxMethods->setToolTip(tr("Methods"));
+    ui->comboBoxMethod->setToolTip(tr("Method"));
+    ui->spinBoxBlockSize->setToolTip(tr("Block size"));
+    ui->spinBoxWidth->setToolTip(tr("Width"));
+    ui->spinBoxHeight->setToolTip(tr("Height"));
+    ui->horizontalSliderZoom->setToolTip(tr("Zoom"));
+    ui->listWidgetRegions->setToolTip(tr("Regions"));
+    ui->listWidgetHighlights->setToolTip(tr("Highlights"));
+    ui->tabWidgetVisualization->setToolTip(tr("Visualization"));
+    ui->toolButtonVisualizationReload->setToolTip(tr("Reload"));
+    ui->toolButtonVisualizationSave->setToolTip(tr("Save"));
+
     connect(ui->widgetImage, SIGNAL(currentLocationChanged(quint64, qint32, qint64)), this, SIGNAL(currentLocationChanged(quint64, qint32, qint64)));
 
     g_pDevice = nullptr;
