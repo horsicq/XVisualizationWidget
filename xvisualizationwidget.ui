@@ -283,52 +283,10 @@
            </layout>
           </item>
           <item>
-           <widget class="QGroupBox" name="groupBoxRegions">
-            <property name="title">
-             <string>Regions</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_5">
-             <property name="leftMargin">
-              <number>2</number>
-             </property>
-             <property name="topMargin">
-              <number>2</number>
-             </property>
-             <property name="rightMargin">
-              <number>2</number>
-             </property>
-             <property name="bottomMargin">
-              <number>2</number>
-             </property>
-             <item>
-              <widget class="QListWidget" name="listWidgetRegions"/>
-             </item>
-            </layout>
-           </widget>
+           <widget class="QListWidget" name="listWidgetRegions"/>
           </item>
           <item>
-           <widget class="QGroupBox" name="groupBoxHighlights">
-            <property name="title">
-             <string>Highlights</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_6">
-             <property name="leftMargin">
-              <number>2</number>
-             </property>
-             <property name="topMargin">
-              <number>2</number>
-             </property>
-             <property name="rightMargin">
-              <number>2</number>
-             </property>
-             <property name="bottomMargin">
-              <number>2</number>
-             </property>
-             <item>
-              <widget class="QListWidget" name="listWidgetHighlights"/>
-             </item>
-            </layout>
-           </widget>
+           <widget class="QListWidget" name="listWidgetHighlights"/>
           </item>
          </layout>
         </widget>
