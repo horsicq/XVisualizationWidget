@@ -35,7 +35,7 @@ XFileDescription::XFileDescription(QGraphicsScene *pScene, const QColor color, c
 
 QRectF XFileDescription::boundingRect() const
 {
-    QRect result;
+    QRectF result;
 
     QFont _font = font();
     QSize _size = QFontMetrics(_font).size(Qt::TextSingleLine, g_sText);

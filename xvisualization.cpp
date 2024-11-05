@@ -40,7 +40,7 @@ QImage XVisualization::createImage(DATA *pData)
 
     for (qint32 i = 0; i < pData->nHeight; i++) {
         for (qint32 j = 0; j < pData->nWidth; j++) {
-            QRect rect(pData->nBlockSize * j, pData->nBlockSize * i, pData->nBlockSize, pData->nBlockSize);
+            QRectF rect(pData->nBlockSize * j, pData->nBlockSize * i, pData->nBlockSize, pData->nBlockSize);
 
             XAREA areaRegion = isRegionPresent(pData, nIndex);
             XAREA areaHighlight = isHighlightPresent(pData, nIndex);
