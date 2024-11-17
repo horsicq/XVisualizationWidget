@@ -64,9 +64,6 @@ private slots:
 protected:
     virtual void registerShortcuts(bool bState);
 
-signals:
-    void currentLocationChanged(quint64 nLocation, qint32 nLocationType, qint64 nSize);
-
 private:
     Ui::XVisualizationWidget *ui;
     QIODevice *g_pDevice;

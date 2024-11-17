@@ -39,9 +39,6 @@ public:
     virtual void setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions);
     virtual void adjustView();
 
-signals:
-    void currentLocationChanged(quint64 nLocation, qint32 nLocationType, qint64 nSize);
-
 protected:
     virtual void registerShortcuts(bool bState);
 

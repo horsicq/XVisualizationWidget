@@ -51,9 +51,6 @@ protected:
     virtual void mousePressEvent(QMouseEvent *pEvent) override;
     virtual void resizeEvent(QResizeEvent *pEvent) override;
 
-signals:
-    void currentLocationChanged(quint64 nLocation, qint32 nLocationType, qint64 nSize);
-
 protected:
     virtual void registerShortcuts(bool bState);
 
