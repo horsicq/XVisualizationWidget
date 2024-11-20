@@ -56,6 +56,14 @@ void XVisualizationImage::adjustView()
     // TODO
 }
 
+void XVisualizationImage::reloadData(bool bSaveSelection)
+{
+    if (!bSaveSelection) {
+        adjust();
+        update();
+    }
+}
+
 void XVisualizationImage::adjust()
 {
     // qint32 nIndex = ((g_data.nWidth * g_nY) + g_nX);

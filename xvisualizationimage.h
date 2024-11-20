@@ -38,6 +38,7 @@ public:
     QPixmap getPixmap();
 
     virtual void adjustView();
+    virtual void reloadData(bool bSaveSelection);
 
 private:
     void adjust();
