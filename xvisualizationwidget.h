@@ -46,6 +46,7 @@ public:
     void reloadImage();
     virtual void setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions);
     virtual void adjustView();
+    virtual void reloadData(bool bSaveSelection);
 
 private slots:
     void on_horizontalSliderZoom_valueChanged(int nValue);

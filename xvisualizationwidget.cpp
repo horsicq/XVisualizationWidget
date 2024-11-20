@@ -312,6 +312,13 @@ void XVisualizationWidget::adjustView()
     }
 }
 
+void XVisualizationWidget::reloadData(bool bSaveSelection)
+{
+    if (!bSaveSelection) {
+        reload();
+    }
+}
+
 void XVisualizationWidget::on_horizontalSliderZoom_valueChanged(int nValue)
 {
     setupMatrix(nValue);
