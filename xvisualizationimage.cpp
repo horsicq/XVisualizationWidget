@@ -58,10 +58,9 @@ void XVisualizationImage::adjustView()
 
 void XVisualizationImage::reloadData(bool bSaveSelection)
 {
-    if (!bSaveSelection) {
-        adjust();
-        update();
-    }
+    Q_UNUSED(bSaveSelection)
+    adjust();
+    update();
 }
 
 void XVisualizationImage::adjust()
