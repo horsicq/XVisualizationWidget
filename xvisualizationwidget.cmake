@@ -1,6 +1,7 @@
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 set(XVISUALIZATIONWIDGET_SOURCES
+    ${XVISUALIZATIONWIDGET_SOURCES}
     ${CMAKE_CURRENT_LIST_DIR}/dialogvisualization.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dialogvisualization.h
     ${CMAKE_CURRENT_LIST_DIR}/dialogvisualization.ui
