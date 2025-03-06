@@ -250,10 +250,7 @@ void XVisualization::handleData()
     XBinary::_MEMORY_MAP memoryMap = XFormats::getMemoryMap(g_pData->fileFormat, g_pData->mapMode, g_pDevice, false, -1, g_pPdStruct);
 
     {
-        XBinary::HLOPTIONS hlOptions = {};
-        hlOptions.bRegions = true;
-
-        QList<XBinary::HREGION> listHRegions = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, &memoryMap, hlOptions, false, -1, g_pPdStruct);
+        QList<XBinary::HREGION> listHRegions = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, &memoryMap, XBinary::HLTYPE_REGIONS, false, -1, g_pPdStruct);
 
         qint32 nNumberOfRecords = listHRegions.count();
 
@@ -279,10 +276,7 @@ void XVisualization::handleData()
         }
     }
     {
-        XBinary::HLOPTIONS hlOptions = {};
-        hlOptions.bHighlights = true;
-
-        QList<XBinary::HREGION> listHighlights = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, &memoryMap, hlOptions, false, -1, g_pPdStruct);
+        QList<XBinary::HREGION> listHighlights = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, &memoryMap, XBinary::HLTYPE_DATA, false, -1, g_pPdStruct);
 
         qint32 nNumberOfRecords = listHighlights.count();
 
