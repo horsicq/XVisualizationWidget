@@ -37,8 +37,8 @@ public:
     void clear();
     QPixmap getPixmap();
 
-    virtual void adjustView();
-    virtual void reloadData(bool bSaveSelection);
+    virtual void adjustView() override;
+    virtual void reloadData(bool bSaveSelection) override;
 
 private:
     void adjust();
@@ -53,7 +53,7 @@ protected:
     virtual void resizeEvent(QResizeEvent *pEvent) override;
 
 protected:
-    virtual void registerShortcuts(bool bState);
+    virtual void registerShortcuts(bool bState) override;
 
 private:
     XVisualization::DATA g_data;
