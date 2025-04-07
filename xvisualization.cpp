@@ -247,23 +247,21 @@ void XVisualization::handleData()
         XBinary::setPdStructCurrent(g_pPdStruct, _nFreeIndex, i);
     }
 
-    XBinary::_MEMORY_MAP memoryMap = XFormats::getMemoryMap(g_pData->fileFormat, g_pData->mapMode, g_pDevice, false, -1, g_pPdStruct);
-
     {
-        QList<XBinary::HREGION> listHRegions = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, &memoryMap, XBinary::HLTYPE_REGIONS, false, -1, g_pPdStruct);
+        QList<XBinary::HREGION> listHRegions = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, XBinary::HLTYPE_FILEREGIONS, false, -1, g_pPdStruct);
 
         qint32 nNumberOfRecords = listHRegions.count();
 
         for (qint32 i = 0; i < nNumberOfRecords; i++) {
-            if (listHRegions.at(i).nOffset != -1) {
-                double dSizeInBlocks = (double)listHRegions.at(i).nSize / dFileBlockSize;
+            if (listHRegions.at(i).nFileOffset != -1) {
+                double dSizeInBlocks = (double)listHRegions.at(i).nFileSize / dFileBlockSize;
 
                 XAREA xarea = {};
                 xarea.bIsEnabled = true;
                 xarea.color = getRegionColor(i);
-                xarea.nOffset = listHRegions.at(i).nOffset;
-                xarea.nSize = listHRegions.at(i).nSize;
-                xarea.nOffsetInBlocks = (double)listHRegions.at(i).nOffset / dFileBlockSize;
+                xarea.nOffset = listHRegions.at(i).nFileOffset;
+                xarea.nSize = listHRegions.at(i).nFileSize;
+                xarea.nOffsetInBlocks = (double)listHRegions.at(i).nFileOffset / dFileBlockSize;
                 xarea.nSizeInBlocks = dSizeInBlocks;
                 xarea.sName = listHRegions.at(i).sName;
 
@@ -276,20 +274,20 @@ void XVisualization::handleData()
         }
     }
     {
-        QList<XBinary::HREGION> listHighlights = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, &memoryMap, XBinary::HLTYPE_DATA, false, -1, g_pPdStruct);
+        QList<XBinary::HREGION> listHighlights = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, XBinary::HLTYPE_DATA, false, -1, g_pPdStruct);
 
         qint32 nNumberOfRecords = listHighlights.count();
 
         for (qint32 i = 0; i < nNumberOfRecords; i++) {
-            if (listHighlights.at(i).nOffset != -1) {
-                double dSizeInBlocks = (double)listHighlights.at(i).nSize / dFileBlockSize;
+            if (listHighlights.at(i).nFileOffset != -1) {
+                double dSizeInBlocks = (double)listHighlights.at(i).nFileSize / dFileBlockSize;
 
                 XAREA xarea = {};
                 xarea.bIsEnabled = true;
                 xarea.color = getHighlightColor(i);
-                xarea.nOffset = listHighlights.at(i).nOffset;
-                xarea.nSize = listHighlights.at(i).nSize;
-                xarea.nOffsetInBlocks = (double)listHighlights.at(i).nOffset / dFileBlockSize;
+                xarea.nOffset = listHighlights.at(i).nFileOffset;
+                xarea.nSize = listHighlights.at(i).nFileSize;
+                xarea.nOffsetInBlocks = (double)listHighlights.at(i).nFileOffset / dFileBlockSize;
                 xarea.nSizeInBlocks = dSizeInBlocks;
                 xarea.sName = listHighlights.at(i).sName;
 
