@@ -206,7 +206,7 @@ void XVisualization::handleData()
 
     XBinary::setPdStructInit(g_pPdStruct, _nFreeIndex, nNumberOfBlocks);
 
-    for (qint32 i = 0; (i < nNumberOfBlocks) && (!(g_pPdStruct->bIsStop)); i++) {
+    for (qint32 i = 0; (i < nNumberOfBlocks) && XBinary::isPdStructNotCanceled(g_pPdStruct); i++) {
         PART part = {};
         part.nOffset = i * dFileBlockSize;
         part.nValue[DATAMETHOD_NONE] = 100;
