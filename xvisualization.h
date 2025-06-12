@@ -24,8 +24,9 @@
 #include <QPainter>
 #include "xformats.h"
 #include "xinfodb.h"
+#include "xthreadobject.h"
 
-class XVisualization : public QObject {
+class XVisualization : public XThreadObject {
     Q_OBJECT
 
 public:
@@ -86,12 +87,8 @@ public:
     static QString methodToString(DATAMETHOD dataMethod);
     static QList<DATAMETHOD> getMethodsListFromFlags(quint64 nMethodFlags);
 
-signals:
-    void errorMessage(const QString &sText);
-    void completed(qint64 nElapsed);
-
 public slots:
-    void handleData();
+    void process();
     static QColor getRegionColor(qint32 nIndex);
     static QColor getHighlightColor(qint32 nIndex);
 

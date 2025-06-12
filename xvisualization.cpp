@@ -20,7 +20,7 @@
  */
 #include "xvisualization.h"
 
-XVisualization::XVisualization(QObject *pParent) : QObject(pParent)
+XVisualization::XVisualization(QObject *pParent) : XThreadObject(pParent)
 {
     g_pDevice = nullptr;
     g_pData = nullptr;
@@ -179,7 +179,7 @@ QList<XVisualization::DATAMETHOD> XVisualization::getMethodsListFromFlags(quint6
     return listResult;
 }
 
-void XVisualization::handleData()
+void XVisualization::process()
 {
     QElapsedTimer scanTimer;
     scanTimer.start();
