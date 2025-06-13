@@ -28,7 +28,8 @@
 #include "xformats.h"
 #include "xfileimage.h"
 #include "xfiledescription.h"
-#include "dialogvisualizationprocess.h"
+#include "xdialogprocess.h"
+#include "xvisualization.h"
 
 namespace Ui {
 class XVisualizationWidget;

@@ -114,9 +114,11 @@ void XVisualizationWidget::reload()
         g_data.nMethodsFlags = ui->comboBoxMethods->getValue().toULongLong();
 
         if (g_pDevice) {
-            DialogVisualizationProcess dvp(XOptions::getMainWidget(this));
+            XVisualization visualisation;
+            XDialogProcess dvp(XOptions::getMainWidget(this), &visualisation);
             dvp.setGlobal(getShortcuts(), getGlobalOptions());
-            dvp.setData(g_pDevice, &g_data);
+            visualisation.setData(g_pDevice, &g_data, dvp.getPdStruct());
+            dvp.start();
 
             dvp.showDialogDelay();
 

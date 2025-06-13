@@ -5,8 +5,6 @@ set(XVISUALIZATIONWIDGET_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/dialogvisualization.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dialogvisualization.h
     ${CMAKE_CURRENT_LIST_DIR}/dialogvisualization.ui
-    ${CMAKE_CURRENT_LIST_DIR}/dialogvisualizationprocess.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dialogvisualizationprocess.h
     ${CMAKE_CURRENT_LIST_DIR}/xfilearrow.cpp
     ${CMAKE_CURRENT_LIST_DIR}/xfilearrow.h
     ${CMAKE_CURRENT_LIST_DIR}/xfiledescription.cpp

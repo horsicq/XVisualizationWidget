@@ -3,7 +3,6 @@ DEPENDPATH += $$PWD
 
 HEADERS += \
     $$PWD/dialogvisualization.h \
-    $$PWD/dialogvisualizationprocess.h \
     $$PWD/xfilearrow.h \
     $$PWD/xfiledescription.h \
     $$PWD/xfileimage.h \
@@ -13,7 +12,6 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/dialogvisualization.cpp \
-    $$PWD/dialogvisualizationprocess.cpp \
     $$PWD/xfilearrow.cpp \
     $$PWD/xfiledescription.cpp \
     $$PWD/xfileimage.cpp \
