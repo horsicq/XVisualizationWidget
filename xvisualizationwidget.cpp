@@ -119,7 +119,6 @@ void XVisualizationWidget::reload()
             dvp.setGlobal(getShortcuts(), getGlobalOptions());
             visualisation.setData(g_pDevice, &g_data, dvp.getPdStruct());
             dvp.start();
-
             dvp.showDialogDelay();
 
             bReloadImage = dvp.isSuccess();
