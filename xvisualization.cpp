@@ -181,9 +181,6 @@ QList<XVisualization::DATAMETHOD> XVisualization::getMethodsListFromFlags(quint6
 
 void XVisualization::process()
 {
-    QElapsedTimer scanTimer;
-    scanTimer.start();
-
     g_pData->listParts.clear();
     g_pData->listRegions.clear();
     g_pData->listHighlights.clear();
@@ -301,8 +298,6 @@ void XVisualization::process()
     }
 
     XBinary::setPdStructFinished(g_pPdStruct, _nFreeIndex);
-
-    emit completed(scanTimer.elapsed());
 }
 
 QColor XVisualization::getRegionColor(qint32 nIndex)
