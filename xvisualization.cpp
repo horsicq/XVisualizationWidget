@@ -245,7 +245,7 @@ void XVisualization::process()
     }
 
     {
-        QList<XBinary::HREGION> listHRegions = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, XBinary::HLTYPE_FILEREGIONS, false, -1, g_pPdStruct);
+        QList<XBinary::FPART> listHRegions = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, XBinary::HLTYPE_NATIVEREGIONS, false, -1, g_pPdStruct);
 
         qint32 nNumberOfRecords = listHRegions.count();
 
@@ -271,7 +271,7 @@ void XVisualization::process()
         }
     }
     {
-        QList<XBinary::HREGION> listHighlights = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, XBinary::HLTYPE_DATA, false, -1, g_pPdStruct);
+        QList<XBinary::FPART> listHighlights = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, XBinary::HLTYPE_DATA, false, -1, g_pPdStruct);
 
         qint32 nNumberOfRecords = listHighlights.count();
 
