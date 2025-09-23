@@ -95,7 +95,7 @@ public slots:
 private:
     QIODevice *g_pDevice;
     DATA *g_pData;
-    XBinary::PDSTRUCT *g_pPdStruct;
+    XBinary::PDSTRUCT *m_pPdStruct;
 };
 
 #endif  // XVISUALIZATION_H

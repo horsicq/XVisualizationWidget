@@ -24,7 +24,7 @@ XVisualization::XVisualization(QObject *pParent) : XThreadObject(pParent)
 {
     g_pDevice = nullptr;
     g_pData = nullptr;
-    g_pPdStruct = nullptr;
+    m_pPdStruct = nullptr;
 }
 
 QImage XVisualization::createImage(DATA *pData)
@@ -118,7 +118,7 @@ void XVisualization::setData(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT 
 {
     g_pDevice = pDevice;
     g_pData = pData;
-    g_pPdStruct = pPdStruct;
+    m_pPdStruct = pPdStruct;
 }
 
 QMap<quint64, QString> XVisualization::getMethodFlags()
@@ -185,7 +185,7 @@ void XVisualization::process()
     g_pData->listRegions.clear();
     g_pData->listHighlights.clear();
 
-    qint32 _nFreeIndex = XBinary::getFreeIndex(g_pPdStruct);
+    qint32 _nFreeIndex = XBinary::getFreeIndex(m_pPdStruct);
 
     XBinary binary(g_pDevice);
 
@@ -201,25 +201,25 @@ void XVisualization::process()
     bool bText = g_pData->nMethodsFlags & (1 << DATAMETHOD_TEXT);
     bool bTextGradient = g_pData->nMethodsFlags & (1 << DATAMETHOD_TEXT_GRADIENT);
 
-    XBinary::setPdStructInit(g_pPdStruct, _nFreeIndex, nNumberOfBlocks);
+    XBinary::setPdStructInit(m_pPdStruct, _nFreeIndex, nNumberOfBlocks);
 
-    for (qint32 i = 0; (i < nNumberOfBlocks) && XBinary::isPdStructNotCanceled(g_pPdStruct); i++) {
+    for (qint32 i = 0; (i < nNumberOfBlocks) && XBinary::isPdStructNotCanceled(m_pPdStruct); i++) {
         PART part = {};
         part.nOffset = i * dFileBlockSize;
         part.nValue[DATAMETHOD_NONE] = 100;
 
         if (bEntropy) {
-            part.dEntropy = binary.getBinaryStatus(XBinary::BSTATUS_ENTROPY, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
+            part.dEntropy = binary.getBinaryStatus(XBinary::BSTATUS_ENTROPY, part.nOffset, g_pData->nFileBlockSize, m_pPdStruct);
             part.nValue[DATAMETHOD_ENTROPY] = 100 + (200.0 * part.dEntropy) / 8.0;
         }
 
         if (bGradient) {
-            part.dGradient = binary.getBinaryStatus(XBinary::BSTATUS_GRADIENT, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
+            part.dGradient = binary.getBinaryStatus(XBinary::BSTATUS_GRADIENT, part.nOffset, g_pData->nFileBlockSize, m_pPdStruct);
             part.nValue[DATAMETHOD_GRADIENT] = 100 + (200.0 * part.dGradient);
         }
 
         if (bZeros || bZerosGradient) {
-            part.dZeros = binary.getBinaryStatus(XBinary::BSTATUS_ZEROS, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
+            part.dZeros = binary.getBinaryStatus(XBinary::BSTATUS_ZEROS, part.nOffset, g_pData->nFileBlockSize, m_pPdStruct);
             part.nValue[DATAMETHOD_ZEROS_GRADIENT] = 100 + (200.0 * part.dZeros);
 
             if (part.dZeros == 1.0) {
@@ -230,7 +230,7 @@ void XVisualization::process()
         }
 
         if (bText || bTextGradient) {
-            part.dText = binary.getBinaryStatus(XBinary::BSTATUS_TEXT, part.nOffset, g_pData->nFileBlockSize, g_pPdStruct);
+            part.dText = binary.getBinaryStatus(XBinary::BSTATUS_TEXT, part.nOffset, g_pData->nFileBlockSize, m_pPdStruct);
             part.nValue[DATAMETHOD_TEXT_GRADIENT] = 100 + (200.0 * part.dText);
 
             if (part.dText == 1.0) {
@@ -241,11 +241,11 @@ void XVisualization::process()
         }
 
         g_pData->listParts.append(part);
-        XBinary::setPdStructCurrent(g_pPdStruct, _nFreeIndex, i);
+        XBinary::setPdStructCurrent(m_pPdStruct, _nFreeIndex, i);
     }
 
     {
-        QList<XBinary::FPART> listHRegions = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, XBinary::HLTYPE_NATIVEREGIONS, false, -1, g_pPdStruct);
+        QList<XBinary::FPART> listHRegions = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, XBinary::HLTYPE_NATIVEREGIONS, false, -1, m_pPdStruct);
 
         qint32 nNumberOfRecords = listHRegions.count();
 
@@ -271,7 +271,7 @@ void XVisualization::process()
         }
     }
     {
-        QList<XBinary::FPART> listHighlights = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, XBinary::HLTYPE_DATA, false, -1, g_pPdStruct);
+        QList<XBinary::FPART> listHighlights = XFormats::getHighlights(g_pData->fileFormat, g_pDevice, XBinary::HLTYPE_DATA, false, -1, m_pPdStruct);
 
         qint32 nNumberOfRecords = listHighlights.count();
 
@@ -297,7 +297,7 @@ void XVisualization::process()
         }
     }
 
-    XBinary::setPdStructFinished(g_pPdStruct, _nFreeIndex);
+    XBinary::setPdStructFinished(m_pPdStruct, _nFreeIndex);
 }
 
 QColor XVisualization::getRegionColor(qint32 nIndex)
