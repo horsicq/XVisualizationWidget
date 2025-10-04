@@ -23,7 +23,7 @@
 XFileImage::XFileImage(const QColor &color)
 {
     g_color = color;
-    g_pData = nullptr;
+    m_pData = nullptr;
     setFlags(ItemIsSelectable | ItemIsMovable);
     setAcceptHoverEvents(true);
 }
@@ -32,9 +32,9 @@ QRectF XFileImage::boundingRect() const
 {
     QRectF rect(0, 0, 300, 600);
 
-    if (g_pData) {
-        rect.setWidth(g_pData->nWidth * g_pData->nBlockSize);
-        rect.setHeight(g_pData->nHeight * g_pData->nBlockSize);
+    if (m_pData) {
+        rect.setWidth(m_pData->nWidth * m_pData->nBlockSize);
+        rect.setHeight(m_pData->nHeight * m_pData->nBlockSize);
     }
 
     return rect;
@@ -49,7 +49,7 @@ QPainterPath XFileImage::shape() const
 
 void XFileImage::setCustomData(XVisualization::DATA *pData, QPixmap &pixmap)
 {
-    g_pData = pData;
+    m_pData = pData;
 
     setPixmap(pixmap);
 }

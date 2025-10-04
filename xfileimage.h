@@ -44,7 +44,7 @@ protected:
 
 private:
     QColor g_color;
-    XVisualization::DATA *g_pData;
+    XVisualization::DATA *m_pData;
 };
 
 #endif  // XFILEIMAGE_H

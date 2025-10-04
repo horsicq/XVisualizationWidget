@@ -68,7 +68,7 @@ protected:
 
 private:
     Ui::XVisualizationWidget *ui;
-    QIODevice *g_pDevice;
+    QIODevice *m_pDevice;
     QGraphicsScene *g_pScene;
     XVisualization::DATA g_data;
 };
