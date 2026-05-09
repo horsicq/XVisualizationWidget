@@ -65,15 +65,6 @@ void XVisualizationImage::reloadData(bool bSaveSelection)
 
 void XVisualizationImage::adjust()
 {
-    // qint32 nIndex = ((g_data.nWidth * g_nY) + g_nX);
-
-    // qint64 nOffset = 0;
-
-    // if (nIndex < g_data.nWidth * g_data.nHeight) {
-    //     nOffset = g_data.listParts.at(nIndex).nOffset;
-    // }
-
-    // qDebug("Offset: %x = %d", nOffset, (qint32)nOffset);
 }
 
 void XVisualizationImage::_clear()
@@ -88,7 +79,6 @@ void XVisualizationImage::_clear()
 void XVisualizationImage::customContextMenu(const QPoint &pos)
 {
     Q_UNUSED(pos)
-    // qDebug("customContextMenu");
 }
 
 void XVisualizationImage::paintEvent(QPaintEvent *pEvent)
@@ -101,10 +91,10 @@ void XVisualizationImage::paintEvent(QPaintEvent *pEvent)
         qint32 nWidth = width();
         qint32 nHeight = height();
 
-        double dRectWidth = (double)nWidth / (double)g_data.nWidth;
-        double dRectHeight = (double)nHeight / (double)g_data.nHeight;
-        double dX = (double)(g_nX * nWidth) / (double)g_data.nWidth;
-        double dY = (double)(g_nY * nHeight) / (double)g_data.nHeight;
+        double dRectWidth = static_cast<double>(nWidth) / static_cast<double>(g_data.nWidth);
+        double dRectHeight = static_cast<double>(nHeight) / static_cast<double>(g_data.nHeight);
+        double dX = static_cast<double>(g_nX * nWidth) / static_cast<double>(g_data.nWidth);
+        double dY = static_cast<double>(g_nY * nHeight) / static_cast<double>(g_data.nHeight);
 
         QRectF rect;
 

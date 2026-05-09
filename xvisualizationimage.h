@@ -37,8 +37,8 @@ public:
     void clear();
     QPixmap getPixmap();
 
-    virtual void adjustView() override;
-    virtual void reloadData(bool bSaveSelection) override;
+    void adjustView() override;
+    void reloadData(bool bSaveSelection) override;
 
 private:
     void adjust();
@@ -48,12 +48,12 @@ private slots:
     void customContextMenu(const QPoint &pos);
 
 protected:
-    virtual void paintEvent(QPaintEvent *pEvent) override;
-    virtual void mousePressEvent(QMouseEvent *pEvent) override;
-    virtual void resizeEvent(QResizeEvent *pEvent) override;
+    void paintEvent(QPaintEvent *pEvent) override;
+    void mousePressEvent(QMouseEvent *pEvent) override;
+    void resizeEvent(QResizeEvent *pEvent) override;
 
 protected:
-    virtual void registerShortcuts(bool bState) override;
+    void registerShortcuts(bool bState) override;
 
 private:
     XVisualization::DATA g_data;
