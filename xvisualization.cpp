@@ -157,9 +157,9 @@ QString XVisualization::methodToString(DATAMETHOD dataMethod)
         case DATAMETHOD_ENTROPY: sResult = tr("Entropy"); break;
         case DATAMETHOD_GRADIENT: sResult = tr("Gradient"); break;
         case DATAMETHOD_ZEROS: sResult = tr("Zeros"); break;
-        case DATAMETHOD_ZEROS_GRADIENT: sResult = QString("%1(%2)").arg(tr("Zeros"), tr("Gradient")); break;
+        case DATAMETHOD_ZEROS_GRADIENT: sResult = QString("%1(%2)").arg(tr("Zeros")).arg(tr("Gradient")); break;
         case DATAMETHOD_TEXT: sResult = tr("Text"); break;
-        case DATAMETHOD_TEXT_GRADIENT: sResult = QString("%1(%2)").arg(tr("Text"), tr("Gradient")); break;
+        case DATAMETHOD_TEXT_GRADIENT: sResult = QString("%1(%2)").arg(tr("Text")).arg(tr("Gradient")); break;
         default: sResult = tr("Unknown");
     }
 

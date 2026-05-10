@@ -36,11 +36,11 @@ public:
     ~DialogVisualization();
 
     void setData(QIODevice *pDevice, XBinary::FT fileType, bool bAuto = false);
-    virtual void setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions);
-    virtual void adjustView();
+    void setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions) override;
+    void adjustView() override;
 
 protected:
-    virtual void registerShortcuts(bool bState);
+    void registerShortcuts(bool bState) override;
 
 private slots:
     void on_pushButtonClose_clicked();
