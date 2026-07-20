@@ -22,9 +22,13 @@
 
 XVisualization::XVisualization(QObject *pParent) : XThreadObject(pParent)
 {
-    m_pDevice = nullptr;
     m_pData = nullptr;
     m_pPdStruct = nullptr;
+}
+
+XVisualization::~XVisualization()
+{
+    clear();
 }
 
 QImage XVisualization::createImage(DATA *pData)
@@ -114,11 +118,26 @@ XVisualization::XAREA XVisualization::isHighlightPresent(DATA *pData, qint64 nBl
     return result;
 }
 
-void XVisualization::setData(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT *pPdStruct)
+void XVisualization::setData(const XBinary::INDATA &inData, DATA *pData, XBinary::PDSTRUCT *pPdStruct)
 {
-    m_pDevice = pDevice;
+    clear();
+
+    m_inData = inData;
     m_pData = pData;
     m_pPdStruct = pPdStruct;
+}
+
+void XVisualization::setData(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT *pPdStruct)
+{
+    XBinary::FT fileType = pData ? pData->fileFormat : XBinary::FT_UNKNOWN;
+    setData(XFormats::createINDATA(fileType, pDevice), pData, pPdStruct);
+}
+
+void XVisualization::clear()
+{
+    m_inData = {};
+    m_pData = nullptr;
+    m_pPdStruct = nullptr;
 }
 
 QMap<quint64, QString> XVisualization::getMethodFlags()
@@ -187,7 +206,8 @@ void XVisualization::process()
 
     qint32 _nFreeIndex = XBinary::getFreeIndex(m_pPdStruct);
 
-    XBinary binary(m_pDevice);
+    QIODevice *pDevice = XFormats::createDevice(m_inData);
+    XBinary binary(pDevice);
 
     qint64 nFileSize = binary.getSize();
     qint32 nNumberOfBlocks = m_pData->nHeight * m_pData->nWidth;
@@ -245,7 +265,7 @@ void XVisualization::process()
     }
 
     {
-        QList<XBinary::FPART> listHRegions = XFormats::getHighlights(m_pData->fileFormat, m_pDevice, XBinary::HLTYPE_NATIVEREGIONS, false, -1, m_pPdStruct);
+        QList<XBinary::FPART> listHRegions = XFormats::getHighlights(m_pData->fileFormat, pDevice, XBinary::HLTYPE_NATIVEREGIONS, false, -1, m_pPdStruct);
 
         qint32 nNumberOfRecords = listHRegions.count();
 
@@ -271,7 +291,7 @@ void XVisualization::process()
         }
     }
     {
-        QList<XBinary::FPART> listHighlights = XFormats::getHighlights(m_pData->fileFormat, m_pDevice, XBinary::HLTYPE_DATA, false, -1, m_pPdStruct);
+        QList<XBinary::FPART> listHighlights = XFormats::getHighlights(m_pData->fileFormat, pDevice, XBinary::HLTYPE_DATA, false, -1, m_pPdStruct);
 
         qint32 nNumberOfRecords = listHighlights.count();
 
@@ -298,6 +318,7 @@ void XVisualization::process()
     }
 
     XBinary::setPdStructFinished(m_pPdStruct, _nFreeIndex);
+    XFormats::removeDevice(pDevice, m_inData);
 }
 
 QColor XVisualization::getRegionColor(qint32 nIndex)

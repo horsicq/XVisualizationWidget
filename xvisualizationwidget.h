@@ -42,7 +42,9 @@ public:
     explicit XVisualizationWidget(QWidget *pParent = nullptr);
     ~XVisualizationWidget();
 
+    void setData(const XBinary::INDATA &inData, bool bAuto = false);
     void setData(QIODevice *pDevice, XBinary::FT fileType, bool bAuto = false);
+    void clear();
     void reload();
     void reloadImage();
     virtual void setGlobal(XShortcuts *pShortcuts, XOptions *pXOptions);
@@ -68,7 +70,7 @@ protected:
 
 private:
     Ui::XVisualizationWidget *ui;
-    QIODevice *m_pDevice;
+    XBinary::INDATA m_inData;
     QGraphicsScene *g_pScene;
     XVisualization::DATA g_data;
 };

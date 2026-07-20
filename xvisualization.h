@@ -77,11 +77,14 @@ public:
     };
 
     explicit XVisualization(QObject *pParent = nullptr);
+    ~XVisualization() override;
 
     static QImage createImage(DATA *pData);
     static XAREA isRegionPresent(DATA *pData, qint64 nBlockIndex);
     static XAREA isHighlightPresent(DATA *pData, qint64 nBlockIndex);
+    void setData(const XBinary::INDATA &inData, DATA *pData, XBinary::PDSTRUCT *pPdStruct);
     void setData(QIODevice *pDevice, DATA *pData, XBinary::PDSTRUCT *pPdStruct);
+    void clear();
     static QMap<quint64, QString> getMethodFlags();
     static quint64 getDefaultMethodFlag();
     static QString methodToString(DATAMETHOD dataMethod);
@@ -93,7 +96,7 @@ public slots:
     static QColor getHighlightColor(qint32 nIndex);
 
 private:
-    QIODevice *m_pDevice;
+    XBinary::INDATA m_inData;
     DATA *m_pData;
     XBinary::PDSTRUCT *m_pPdStruct;
 };

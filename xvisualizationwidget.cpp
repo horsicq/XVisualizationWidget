@@ -44,7 +44,6 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : XShortcutsWidget(
 
     connect(ui->widgetImage, SIGNAL(currentLocationChanged(quint64, qint32, qint64)), this, SIGNAL(currentLocationChanged(quint64, qint32, qint64)));
 
-    m_pDevice = nullptr;
     g_pScene = new QGraphicsScene(this);
 
     ui->graphicsViewResult->setDragMode(QGraphicsView::RubberBandDrag);
@@ -65,22 +64,27 @@ XVisualizationWidget::XVisualizationWidget(QWidget *pParent) : XShortcutsWidget(
 
 XVisualizationWidget::~XVisualizationWidget()
 {
+    clear();
+
     delete g_pScene;
     delete ui;
 }
 
-void XVisualizationWidget::setData(QIODevice *pDevice, XBinary::FT fileType, bool bAuto)
+void XVisualizationWidget::setData(const XBinary::INDATA &inData, bool bAuto)
 {
-    this->m_pDevice = pDevice;
+    clear();
+
+    QIODevice *pDevice = XFormats::createDevice(inData);
+    m_inData = inData;
 
     qint32 nWidth = 1;
     qint32 nHeight = 1;
 
-    if (m_pDevice) {
-        XBinary::FT _fileType = XFormats::setFileTypeComboBox(fileType, m_pDevice, ui->comboBoxType);
-        XFormats::getMapModesList(_fileType, ui->comboBoxMapMode);
+    if (pDevice) {
+        XBinary::FT fileType = XFormats::setFileTypeComboBox(inData.fileType, pDevice, ui->comboBoxType);
+        XFormats::getMapModesList(fileType, ui->comboBoxMapMode);
 
-        qint32 nPieces = (m_pDevice->size()) / 0x300;
+        qint32 nPieces = pDevice->size() / 0x300;
 
         if (nPieces > 3) {
             nWidth = qMin(nPieces, 100);
@@ -88,12 +92,24 @@ void XVisualizationWidget::setData(QIODevice *pDevice, XBinary::FT fileType, boo
         }
     }
 
+    XFormats::removeDevice(pDevice, inData);
+
     ui->spinBoxWidth->setValue(nWidth);
     ui->spinBoxHeight->setValue(nHeight);
 
     if (bAuto) {
         reload();
     }
+}
+
+void XVisualizationWidget::setData(QIODevice *pDevice, XBinary::FT fileType, bool bAuto)
+{
+    setData(XFormats::createINDATA(fileType, pDevice), bAuto);
+}
+
+void XVisualizationWidget::clear()
+{
+    m_inData = {};
 }
 
 void XVisualizationWidget::reload()
@@ -106,23 +122,21 @@ void XVisualizationWidget::reload()
     // Get XBinary:: regions, highlights, resolution
     bool bReloadImage = false;
 
-    if (m_pDevice) {
+    if (m_inData.inDataMode != XBinary::INDATA_MODE_UNKNOWN) {
         g_data.nWidth = ui->spinBoxWidth->value();
         g_data.nHeight = ui->spinBoxHeight->value();
         g_data.fileFormat = (XBinary::FT)(ui->comboBoxType->currentData().toInt());
         g_data.mapMode = (XBinary::MAPMODE)(ui->comboBoxMapMode->currentData().toInt());
         g_data.nMethodsFlags = ui->comboBoxMethods->getValue().toULongLong();
 
-        if (m_pDevice) {
-            XVisualization visualisation;
-            XDialogProcess dvp(XOptions::getMainWidget(this), &visualisation);
-            dvp.setGlobal(getShortcuts(), getGlobalOptions());
-            visualisation.setData(m_pDevice, &g_data, dvp.getPdStruct());
-            dvp.start();
-            dvp.showDialogDelay();
+        XVisualization visualisation;
+        XDialogProcess dvp(XOptions::getMainWidget(this), &visualisation);
+        dvp.setGlobal(getShortcuts(), getGlobalOptions());
+        visualisation.setData(m_inData, &g_data, dvp.getPdStruct());
+        dvp.start();
+        dvp.showDialogDelay();
 
-            bReloadImage = dvp.isSuccess();
-        }
+        bReloadImage = dvp.isSuccess();
 
         {
             ui->listWidgetRegions->clear();
@@ -184,7 +198,7 @@ void XVisualizationWidget::reloadImage()
 {
     g_pScene->clear();
 
-    if (m_pDevice) {
+    if (m_inData.inDataMode != XBinary::INDATA_MODE_UNKNOWN) {
         {
             qint32 nNumberOfRecords = ui->listWidgetRegions->count();
 
@@ -337,7 +351,9 @@ void XVisualizationWidget::setupMatrix(qint32 nValue)
 void XVisualizationWidget::on_toolButtonVisualizationSave_clicked()
 {
     QString sFilter = XOptions::getImageFilter();
-    QString sFileName = XBinary::getResultFileName(m_pDevice, QString("%1.png").arg(tr("Visualization")));
+    QIODevice *pDevice = XFormats::createDevice(m_inData);
+    QString sFileName = XBinary::getResultFileName(pDevice, QString("%1.png").arg(tr("Visualization")));
+    XFormats::removeDevice(pDevice, m_inData);
 
     sFileName = QFileDialog::getSaveFileName(this, tr("Save"), sFileName, sFilter);
 
